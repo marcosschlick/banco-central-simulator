@@ -20,6 +20,7 @@
   "homepage": "https://github.com/marcosschlick/banco-central-simulator#readme",
   "dependencies": {
     "express": "^5.1.0",
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "uuid": "^11.1.0"
   }
 }
