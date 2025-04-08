@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/marcosschlick/banco-central-simulator/issues"
   },
-  "homepage": "https://github.com/marcosschlick/banco-central-simulator#readme"
+  "homepage": "https://github.com/marcosschlick/banco-central-simulator#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
 }
