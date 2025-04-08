@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "lint:check": "prettier --check .",
-    "lint:fix": "prettier --write ."
+    "lint:fix": "prettier --write .",
+    "dev": "node --watch src/server.js"
   },
   "repository": {
     "type": "git",
