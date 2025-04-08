@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "API REST que simula um agregador bancário (Open Finance) com Node.js, Express e PostgreSQL, permitindo consolidar saldos, extratos e transações de usuários em múltiplas instituições financeiras, como um \"mini banco central\".",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint:check": "prettier --check .",
+    "lint:fix": "prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,7 @@
   },
   "homepage": "https://github.com/marcosschlick/banco-central-simulator#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "prettier": "^3.5.3"
   }
 }
