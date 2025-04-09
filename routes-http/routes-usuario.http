@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "nome": "Fulano de Tal",
-  "cpf": "123.456.789-00"
+  "cpf": "12345678900"
 }
 
 ### buscar usuário por id
