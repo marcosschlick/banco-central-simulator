@@ -1,13 +1,14 @@
-import { ContaRepositoryMemory } from "../repositories-memory/ContaRepositoryMemory.js";
+import { ContaRepository } from "../repositories/ContaRepository.js";
 
 export class ContaController {
   constructor() {
-    this.repository = new ContaRepositoryMemory();
+    this.repository = new ContaRepository();
   }
 
   criar = async (req, res) => {
     try {
       const contaCriada = await this.repository.criar(req.body);
+      console.log(contaCriada);
       res.status(201).json(contaCriada);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -23,8 +24,8 @@ export class ContaController {
     }
   };
 
-  listar = (req, res) => {
-    const contas = this.repository.listar();
+  listar = async (req, res) => {
+    const contas = await this.repository.listar();
     res.status(200).json(contas);
   };
 

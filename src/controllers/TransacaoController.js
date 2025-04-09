@@ -1,8 +1,8 @@
-import { TransacaoRepositoryMemory } from "../repositories-memory/TransacaoRepositoryMemory.js";
+import { TransacaoRepository } from "../repositories/TransacaoRepository.js";
 
 export class TransacaoController {
   constructor() {
-    this.repository = new TransacaoRepositoryMemory();
+    this.repository = new TransacaoRepository();
   }
 
   criar = async (req, res) => {
@@ -23,8 +23,8 @@ export class TransacaoController {
     }
   };
 
-  listar = (req, res) => {
-    const transacoes = this.repository.listar();
+  listar = async (req, res) => {
+    const transacoes = await this.repository.listar();
     res.status(200).json(transacoes);
   };
 
