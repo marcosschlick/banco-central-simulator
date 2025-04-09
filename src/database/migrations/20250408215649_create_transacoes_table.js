@@ -1,11 +1,7 @@
 export async function up(knex) {
   return knex.schema.createTable("transacao", (table) => {
-    table.string("id", 36).primary().notNullable();
-    table
-      .string("conta_id", 36)
-      .notNullable()
-      .references("id")
-      .inTable("conta");
+    table.uuid("id").primary().defaultTo(knex.raw("gen_random_uuid()"));
+    table.uuid("conta_id").notNullable().references("id").inTable("conta");
     table.decimal("valor", 15, 2).notNullable();
     table.timestamp("data").notNullable();
     table.timestamps(true, true);

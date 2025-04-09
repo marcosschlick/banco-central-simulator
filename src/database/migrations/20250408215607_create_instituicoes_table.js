@@ -1,6 +1,6 @@
 export async function up(knex) {
   return knex.schema.createTable("instituicao", (table) => {
-    table.string("id", 36).primary().notNullable();
+    table.uuid("id").primary().defaultTo(knex.raw("gen_random_uuid()"));
     table.string("nome", 100).notNullable();
     table.string("codigo", 3).notNullable().unique();
     table.timestamps(true, true);
