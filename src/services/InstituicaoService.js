@@ -22,6 +22,6 @@ export default class InstituicaoService {
   }
 
   async remover(id) {
-    await this.instituicaoRepository.remover({ where: { id } });
+    await this.instituicaoRepository.remover(id);
   }
 }

@@ -22,6 +22,6 @@ export default class UsuarioService {
   }
 
   async remover(id) {
-    await this.usuarioRepository.remover({ where: { id } });
+    await this.usuarioRepository.remover(id);
   }
 }
