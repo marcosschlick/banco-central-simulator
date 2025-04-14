@@ -1,5 +1,5 @@
 ### criar conta
-POST http://localhost:3000/contas
+POST http://localhost:3333/contas
 Content-Type: application/json
 
 {
@@ -9,15 +9,15 @@ Content-Type: application/json
 }
 
 ### buscar conta por id
-GET http://localhost:3000/contas/id-exemplo
+GET http://localhost:3333/contas/id-exemplo
 Content-Type: application/json
 
 ### listar todas as contas
-GET http://localhost:3000/contas
+GET http://localhost:3333/contas
 Content-Type: application/json
 
 ### atualizar conta
-PUT http://localhost:3000/contas/id-exemplo
+PUT http://localhost:3333/contas/id-exemplo
 Content-Type: application/json
 
 {
@@ -25,5 +25,5 @@ Content-Type: application/json
 }
 
 ### deletar conta
-DELETE http://localhost:3000/contas/id-exemplo
+DELETE http://localhost:3333/contas/id-exemplo
 Content-Type: application/json

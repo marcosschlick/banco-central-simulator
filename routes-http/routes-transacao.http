@@ -1,5 +1,5 @@
 ### criar transação
-POST http://localhost:3000/transacoes
+POST http://localhost:3333/transacoes
 Content-Type: application/json
 
 {
@@ -9,15 +9,15 @@ Content-Type: application/json
 }
 
 ### buscar transação por id
-GET http://localhost:3000/transacoes/id-exemplo
+GET http://localhost:3333/transacoes/id-exemplo
 Content-Type: application/json
 
 ### listar todas as transações
-GET http://localhost:3000/transacoes
+GET http://localhost:3333/transacoes
 Content-Type: application/json
 
 ### atualizar transação
-PUT http://localhost:3000/transacoes/id-exemplo
+PUT http://localhost:3333/transacoes/id-exemplo
 Content-Type: application/json
 
 {
@@ -25,5 +25,5 @@ Content-Type: application/json
 }
 
 ### deletar transação
-DELETE http://localhost:3000/transacoes/id-exemplo
+DELETE http://localhost:3333/transacoes/id-exemplo
 Content-Type: application/json

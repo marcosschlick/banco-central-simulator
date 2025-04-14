@@ -1,5 +1,5 @@
 ### criar usuário
-POST http://localhost:3000/usuarios
+POST http://localhost:3333/usuarios
 Content-Type: application/json
 
 {
@@ -8,15 +8,15 @@ Content-Type: application/json
 }
 
 ### buscar usuário por id
-GET http://localhost:3000/usuarios/id-exemplo
+GET http://localhost:3333/usuarios/id-exemplo
 Content-Type: application/json
 
 ### listar todos os usuários
-GET http://localhost:3000/usuarios
+GET http://localhost:3333/usuarios
 Content-Type: application/json
 
 ### atualizar usuário
-PUT http://localhost:3000/usuarios/id-exemplo
+PUT http://localhost:3333/usuarios/id-exemplo
 Content-Type: application/json
 
 {
@@ -24,5 +24,5 @@ Content-Type: application/json
 }
 
 ### deletar usuário
-DELETE http://localhost:3000/usuarios/id-exemplo
+DELETE http://localhost:3333/usuarios/id-exemplo
 Content-Type: application/json
