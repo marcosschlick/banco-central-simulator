@@ -1,30 +1,24 @@
-import connection from "../database/database.js";
+import Usuario from "../models/Usuario.js";
 
 export class UsuarioRepository {
-  async criar(usuario) {
-    const [usuarioCriado] = await connection("usuario")
-      .insert(usuario)
-      .returning("*");
-    return usuarioCriado;
+  async criar(conta) {
+    return await Usuario.create(conta);
   }
 
   async buscarPorId(id) {
-    return connection("usuario").where({ id }).first();
+    return await Usuario.findByPk(id);
   }
 
   async listar() {
-    return connection("usuario").select("*");
+    return await Usuario.findAll();
   }
 
   async atualizar(id, dadosAtualizados) {
-    const [usuarioAtualizado] = await connection("usuario")
-      .where({ id })
-      .update(dadosAtualizados)
-      .returning("*");
-    return usuarioAtualizado;
+    await Usuario.update(dadosAtualizados, { where: { id } });
+    return await Usuario.findByPk(id);
   }
 
   async remover(id) {
-    await connection("usuario").where({ id }).del();
+    await Usuario.destroy({ where: { id } });
   }
 }

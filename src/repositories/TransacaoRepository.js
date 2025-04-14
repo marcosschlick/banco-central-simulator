@@ -1,33 +1,24 @@
-import connection from "../database/database.js";
+import Transacao from "../models/Transacao.js";
 
 export class TransacaoRepository {
-  async criar(transacao) {
-    if (!transacao.data) {
-      transacao.data = new Date().toISOString();
-    }
-    const [transacaoCriada] = await connection("transacao")
-      .insert(transacao)
-      .returning("*");
-    return transacaoCriada;
+  async criar(conta) {
+    return await Transacao.create(conta);
   }
 
   async buscarPorId(id) {
-    return connection("transacao").where({ id }).first();
+    return await Transacao.findByPk(id);
   }
 
   async listar() {
-    return connection("transacao").select("*");
+    return await Transacao.findAll();
   }
 
   async atualizar(id, dadosAtualizados) {
-    const [transacaoAtualizada] = await connection("transacao")
-      .where({ id })
-      .update(dadosAtualizados)
-      .returning("*");
-    return transacaoAtualizada;
+    await Transacao.update(dadosAtualizados, { where: { id } });
+    return await Transacao.findByPk(id);
   }
 
   async remover(id) {
-    await connection("transacao").where({ id }).del();
+    await Transacao.destroy({ where: { id } });
   }
 }

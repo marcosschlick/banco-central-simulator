@@ -1,30 +1,24 @@
-import connection from "../database/database.js";
+import Instituicao from "../models/Instituicao.js";
 
 export class InstituicaoRepository {
-  async criar(instituicao) {
-    const [instituicaoCriada] = await connection("instituicao")
-      .insert(instituicao)
-      .returning("*");
-    return instituicaoCriada;
+  async criar(conta) {
+    return await Instituicao.create(conta);
   }
 
   async buscarPorId(id) {
-    return connection("instituicao").where({ id }).first();
+    return await Instituicao.findByPk(id);
   }
 
   async listar() {
-    return connection("instituicao").select("*");
+    return await Instituicao.findAll();
   }
 
   async atualizar(id, dadosAtualizados) {
-    const [instituicaoAtualizada] = await connection("instituicao")
-      .where({ id })
-      .update(dadosAtualizados)
-      .returning("*");
-    return instituicaoAtualizada;
+    await Instituicao.update(dadosAtualizados, { where: { id } });
+    return await Instituicao.findByPk(id);
   }
 
   async remover(id) {
-    await connection("instituicao").where({ id }).del();
+    await Instituicao.destroy({ where: { id } });
   }
 }

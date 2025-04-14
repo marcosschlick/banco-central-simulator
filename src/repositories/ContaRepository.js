@@ -1,30 +1,24 @@
-import connection from "../database/database.js";
+import Conta from "../models/Conta.js";
 
 export class ContaRepository {
   async criar(conta) {
-    const [contaCriada] = await connection("conta")
-      .insert(conta)
-      .returning("*");
-    return contaCriada;
+    return await Conta.create(conta);
   }
 
   async buscarPorId(id) {
-    return connection("conta").where({ id }).first();
+    return await Conta.findByPk(id);
   }
 
   async listar() {
-    return connection("conta").select("*");
+    return await Conta.findAll();
   }
 
   async atualizar(id, dadosAtualizados) {
-    const [contaAtualizada] = await connection("conta")
-      .where({ id })
-      .update(dadosAtualizados)
-      .returning("*");
-    return contaAtualizada;
+    await Conta.update(dadosAtualizados, { where: { id } });
+    return await Conta.findByPk(id);
   }
 
   async remover(id) {
-    await connection("conta").where({ id }).del();
+    await Conta.destroy({ where: { id } });
   }
 }
