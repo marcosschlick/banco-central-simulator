@@ -1,6 +1,6 @@
 import Transacao from "../models/Transacao.js";
 
-export class TransacaoRepository {
+export default class TransacaoRepository {
   async criar(conta) {
     return await Transacao.create(conta);
   }
