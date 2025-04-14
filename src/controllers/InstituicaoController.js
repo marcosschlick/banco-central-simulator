@@ -1,13 +1,13 @@
-import { InstituicaoRepository } from "../repositories/InstituicaoRepository.js";
+import InstituicaoService from "../services/InstituicaoService.js";
 
-export class InstituicaoController {
+export default class InstituicaoController {
   constructor() {
-    this.repository = new InstituicaoRepository();
+    this.instituicaoService = new InstituicaoService();
   }
 
   criar = async (req, res) => {
     try {
-      const instituicaoCriada = await this.repository.criar(req.body);
+      const instituicaoCriada = await this.instituicaoService.criar(req.body);
       res.status(201).json(instituicaoCriada);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -16,7 +16,9 @@ export class InstituicaoController {
 
   buscarPorId = async (req, res) => {
     try {
-      const instituicao = await this.repository.buscarPorId(req.params.id);
+      const instituicao = await this.instituicaoService.buscarPorId(
+        req.params.id,
+      );
       res.status(200).json(instituicao);
     } catch (error) {
       res.status(404).json({ error: "Instituição não encontrada" });
@@ -24,13 +26,13 @@ export class InstituicaoController {
   };
 
   listar = async (req, res) => {
-    const instituicoes = await this.repository.listar();
+    const instituicoes = await this.instituicaoService.listar();
     res.status(200).json(instituicoes);
   };
 
   atualizar = async (req, res) => {
     try {
-      const instituicaoAtualizada = await this.repository.atualizar(
+      const instituicaoAtualizada = await this.instituicaoService.atualizar(
         req.params.id,
         req.body,
       );
@@ -42,7 +44,7 @@ export class InstituicaoController {
 
   remover = async (req, res) => {
     try {
-      await this.repository.remover(req.params.id);
+      await this.instituicaoService.remover(req.params.id);
       res.status(204).send();
     } catch (error) {
       res.status(404).json({ error: "Instituição não encontrada" });

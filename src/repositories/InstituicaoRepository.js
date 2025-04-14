@@ -1,6 +1,6 @@
 import Instituicao from "../models/Instituicao.js";
 
-export class InstituicaoRepository {
+export default class InstituicaoRepository {
   async criar(conta) {
     return await Instituicao.create(conta);
   }
