@@ -1,13 +1,13 @@
-import { ContaRepository } from "../repositories/ContaRepository.js";
+import ContaService from "../services/ContaService.js";
 
-export class ContaController {
+export default class ContaController {
   constructor() {
-    this.repository = new ContaRepository();
+    this.contaService = new ContaService();
   }
 
   criar = async (req, res) => {
     try {
-      const contaCriada = await this.repository.criar(req.body);
+      const contaCriada = await this.contaService.criar(req.body);
       console.log(contaCriada);
       res.status(201).json(contaCriada);
     } catch (error) {
@@ -17,7 +17,7 @@ export class ContaController {
 
   buscarPorId = async (req, res) => {
     try {
-      const conta = await this.repository.buscarPorId(req.params.id);
+      const conta = await this.contaService.buscarPorId(req.params.id);
       res.status(200).json(conta);
     } catch (error) {
       res.status(404).json({ error: "Conta não encontrada" });
@@ -25,13 +25,13 @@ export class ContaController {
   };
 
   listar = async (req, res) => {
-    const contas = await this.repository.listar();
+    const contas = await this.contaService.listar();
     res.status(200).json(contas);
   };
 
   atualizar = async (req, res) => {
     try {
-      const contaAtualizada = await this.repository.atualizar(
+      const contaAtualizada = await this.contaService.atualizar(
         req.params.id,
         req.body,
       );
@@ -43,7 +43,7 @@ export class ContaController {
 
   remover = async (req, res) => {
     try {
-      await this.repository.remover(req.params.id);
+      await this.contaService.remover(req.params.id);
       res.status(204).send();
     } catch (error) {
       res.status(404).json({ error: "Conta não encontrada" });

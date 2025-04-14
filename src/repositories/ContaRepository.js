@@ -1,6 +1,6 @@
 import Conta from "../models/Conta.js";
 
-export class ContaRepository {
+export default class ContaRepository {
   async criar(conta) {
     return await Conta.create(conta);
   }
