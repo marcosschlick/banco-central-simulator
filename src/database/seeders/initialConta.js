@@ -1,0 +1,121 @@
+import Conta from "../../models/Conta.js";
+
+export default async function seedContas() {
+  const contas = [
+    {
+      id: "11111111-1111-4111-a111-111111111111",
+      usuario_id: "aa00bb11-cc22-4d33-8e44-ff55aa66bb77",
+      instituicao_id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+      saldo: 1500.0,
+      credito_limite: 1000.0,
+      credito_disponivel: 500.0,
+    },
+    {
+      id: "22222222-2222-4222-b222-222222222222",
+      usuario_id: "bb11cc22-dd33-4e44-9f55-00aabbccdd88",
+      instituicao_id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+      saldo: 3000.0,
+      credito_limite: 2000.0,
+      credito_disponivel: 1000.0,
+    },
+    {
+      id: "33333333-3333-4333-c333-333333333333",
+      usuario_id: "cc22dd33-ee44-4f55-0a66-11bbccddee99",
+      instituicao_id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+      saldo: 750.5,
+      credito_limite: 500.0,
+      credito_disponivel: 250.0,
+    },
+    {
+      id: "44444444-4444-4444-d444-444444444444",
+      usuario_id: "dd33ee44-ff55-4066-1b77-22ccddeeff00",
+      instituicao_id: "b1ffc1d4-9124-4c1f-9c6d-7bb9bd380a12",
+      saldo: 4200.0,
+      credito_limite: 3000.0,
+      credito_disponivel: 1500.0,
+    },
+    {
+      id: "55555555-5555-4555-e555-555555555555",
+      usuario_id: "ee44ff55-0066-4177-2c88-33ddeeff0011",
+      instituicao_id: "c2eedc22-a345-4def-8c7d-8cc9bd380a13",
+      saldo: 12500.0,
+      credito_limite: 5000.0,
+      credito_disponivel: 2500.0,
+    },
+    {
+      id: "66666666-6666-4666-f666-666666666666",
+      usuario_id: "ff550066-1177-4288-3d99-44eeff001122",
+      instituicao_id: "d3ffd333-b456-4eef-9d7e-9dd9bd380a14",
+      saldo: 800.0,
+      credito_limite: 1000.0,
+      credito_disponivel: 500.0,
+    },
+    {
+      id: "77777777-7777-4777-0777-777777777777",
+      usuario_id: "00661177-2288-4399-4eaa-55ff00112233",
+      instituicao_id: "e4eeec44-c567-4f0f-ae8f-0ee9bd380a15",
+      saldo: 3500.75,
+      credito_limite: 2000.0,
+      credito_disponivel: 1000.0,
+    },
+    {
+      id: "88888888-8888-4888-1888-888888888888",
+      usuario_id: "11772288-3399-44aa-5fbb-660011223344",
+      instituicao_id: "f5fffd55-d678-401f-bf90-1ff9bd380a16",
+      saldo: 9200.0,
+      credito_limite: 4000.0,
+      credito_disponivel: 2000.0,
+    },
+    {
+      id: "99999999-9999-4999-2999-999999999999",
+      usuario_id: "22883399-44aa-55bb-60cc-770122334455",
+      instituicao_id: "a6eeec66-e789-412f-c0a1-2cc9bd380a17",
+      saldo: 1500.0,
+      credito_limite: 1000.0,
+      credito_disponivel: 500.0,
+    },
+    {
+      id: "10101010-1010-4101-3101-010101010101",
+      usuario_id: "339944aa-55bb-66cc-71dd-882233445566",
+      instituicao_id: "b7fffd77-f89a-423f-d1b2-3dd9bd380a18",
+      saldo: 600.25,
+      credito_limite: 500.0,
+      credito_disponivel: 250.0,
+    },
+    {
+      id: "20202020-2020-4202-4202-020202020202",
+      usuario_id: "aa00bb11-cc22-4d33-8e44-ff55aa66bb77",
+      instituicao_id: "c8eeec88-09ab-434f-e2c3-4ee9bd380a19",
+      saldo: 2000.0,
+      credito_limite: 1500.0,
+      credito_disponivel: 750.0,
+    },
+    {
+      id: "30303030-3030-4303-5303-030303030303",
+      usuario_id: "bb11cc22-dd33-4e44-9f55-00aabbccdd88",
+      instituicao_id: "d9fffd99-1abc-445f-f3d4-5ff9bd380a20",
+      saldo: 4500.0,
+      credito_limite: 3000.0,
+      credito_disponivel: 1500.0,
+    },
+    {
+      id: "40404040-4040-4404-6404-040404040404",
+      usuario_id: "44aa55bb-66cc-77dd-82ee-993344556677",
+      instituicao_id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+      saldo: 10000.0,
+      credito_limite: 5000.0,
+      credito_disponivel: 2500.0,
+    },
+    {
+      id: "50505050-5050-4505-7505-050505050505",
+      usuario_id: "55bb66cc-77dd-88ee-93ff-aa4556677889",
+      instituicao_id: "b1ffc1d4-9124-4c1f-9c6d-7bb9bd380a12",
+      saldo: 800.0,
+      credito_limite: 400.0,
+      credito_disponivel: 200.0,
+    },
+  ];
+
+  await Conta.bulkCreate(contas);
+  console.log("Seed de Contas criado!");
+}
