@@ -1,6 +1,6 @@
 import Usuario from "../models/Usuario.js";
 
-export class UsuarioRepository {
+export default class UsuarioRepository {
   async criar(conta) {
     return await Usuario.create(conta);
   }

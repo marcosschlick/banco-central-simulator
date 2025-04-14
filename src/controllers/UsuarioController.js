@@ -1,13 +1,13 @@
-import { UsuarioRepository } from "../repositories/UsuarioRepository.js";
+import UsuarioService from "../services/UsuarioService.js";
 
-export class UsuarioController {
+export default class UsuarioController {
   constructor() {
-    this.repository = new UsuarioRepository();
+    this.usuarioService = new UsuarioService();
   }
 
   criar = async (req, res) => {
     try {
-      const usuarioCriado = await this.repository.criar(req.body);
+      const usuarioCriado = await this.usuarioService.criar(req.body);
       res.status(201).json(usuarioCriado);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -16,7 +16,7 @@ export class UsuarioController {
 
   buscarPorId = async (req, res) => {
     try {
-      const usuario = await this.repository.buscarPorId(req.params.id);
+      const usuario = await this.usuarioService.buscarPorId(req.params.id);
       res.status(200).json(usuario);
     } catch (error) {
       res.status(404).json({ error: "Usuário não encontrado" });
@@ -24,13 +24,13 @@ export class UsuarioController {
   };
 
   listar = async (req, res) => {
-    const usuarios = await this.repository.listar();
+    const usuarios = await this.usuarioService.listar();
     res.status(200).json(usuarios);
   };
 
   atualizar = async (req, res) => {
     try {
-      const usuarioAtualizado = await this.repository.atualizar(
+      const usuarioAtualizado = await this.usuarioService.atualizar(
         req.params.id,
         req.body,
       );
@@ -42,7 +42,7 @@ export class UsuarioController {
 
   remover = async (req, res) => {
     try {
-      await this.repository.remover(req.params.id);
+      await this.usuarioService.remover(req.params.id);
       res.status(204).send();
     } catch (error) {
       res.status(404).json({ error: "Usuário não encontrado" });
