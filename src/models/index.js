@@ -1,26 +1,28 @@
-import sequelize from "../config/database.js";
-import Usuario from "./Usuario.js";
-import Instituicao from "./Instituicao.js";
-import Conta from "./Conta.js";
-import Transacao from "./Transacao.js";
+import Sequelize from "sequelize";
+import databaseConfig from "../config/database.cjs";
 
-const models = {
-  Usuario,
-  Instituicao,
-  Conta,
-  Transacao,
-};
+import Conta from "../models/Conta.js";
+import Instituicao from "../models/Instituicao.js";
+import Transacao from "../models/Transacao.js";
+import Usuario from "../models/Usuario.js";
 
-Object.values(models).forEach((model) => {
-  if (model.associate) {
-    model.associate(models);
+const models = [Conta, Instituicao, Transacao, Usuario];
+
+class Database {
+  constructor() {
+    this.init();
   }
-});
 
-const db = {
-  sequelize,
-  Sequelize: sequelize.Sequelize,
-  ...models,
-};
+  init() {
+    this.connection = new Sequelize(databaseConfig);
 
-export default db;
+    models.forEach((model) => model.init(this.connection));
+    models.forEach((model) => {
+      if (model.associate) {
+        model.associate(this.connection.models);
+      }
+    });
+  }
+}
+
+export default new Database();

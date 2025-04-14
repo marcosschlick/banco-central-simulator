@@ -1,48 +1,54 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../config/database.js";
+import { Sequelize, Model } from "sequelize";
 
-const Transacao = sequelize.define(
-  "Transacao",
-  {
-    id: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-    },
-    codigo: {
-      type: DataTypes.STRING(15),
-    },
-    tipo: {
-      type: DataTypes.ENUM("debito", "credito", "transferencia"),
-      allowNull: false,
-    },
-    valor: {
-      type: DataTypes.DECIMAL(15, 2),
-      allowNull: false,
-    },
-    data: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-  },
-  {
-    tableName: "transacao",
-    timestamps: false,
-  },
-);
+class Transacao extends Model {
+  static init(sequelize) {
+    super.init(
+      {
+        id: {
+          type: Sequelize.UUID,
+          primaryKey: true,
+          defaultValue: Sequelize.UUIDV4,
+        },
+        codigo: {
+          type: Sequelize.STRING(15),
+        },
+        tipo: {
+          type: Sequelize.ENUM("debito", "credito", "transferencia"),
+          allowNull: false,
+        },
+        valor: {
+          type: Sequelize.DECIMAL(15, 2),
+          allowNull: false,
+        },
+        data: {
+          type: Sequelize.DATE,
+          allowNull: false,
+        },
+      },
+      {
+        sequelize,
+        modelName: "Transacao",
+        tableName: "transacao",
+        timestamps: false,
+      },
+    );
 
-Transacao.associate = (models) => {
-  Transacao.belongsTo(models.Conta, {
-    foreignKey: "conta_id",
-    as: "conta_origem",
-    onDelete: "CASCADE",
-  });
+    return this;
+  }
 
-  Transacao.belongsTo(models.Conta, {
-    foreignKey: "conta_destino",
-    as: "conta_destino",
-    onDelete: "SET NULL",
-  });
-};
+  static associate(models) {
+    this.belongsTo(models.Conta, {
+      foreignKey: "conta_id",
+      as: "conta_origem",
+      onDelete: "CASCADE",
+    });
+
+    this.belongsTo(models.Conta, {
+      foreignKey: "conta_id",
+      as: "conta_destino",
+      onDelete: "SET NULL",
+    });
+  }
+}
 
 export default Transacao;
