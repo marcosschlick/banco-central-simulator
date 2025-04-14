@@ -7,7 +7,8 @@
   "scripts": {
     "lint:check": "prettier --check .",
     "lint:fix": "prettier --write .",
-    "dev": "node --watch src/server.js"
+    "dev": "node --watch src/server.js",
+    "seed": "node src/database/seeders/index.js"
   },
   "repository": {
     "type": "git",
