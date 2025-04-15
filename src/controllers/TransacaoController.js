@@ -23,6 +23,29 @@ export default class TransacaoController {
     }
   };
 
+  buscarPorUsuario = async (req, res) => {
+    try {
+      const transacao = await this.transacaoService.buscarPorUsuario(
+        req.params.id,
+      );
+      res.status(200).json(transacao);
+    } catch (error) {
+      res.status(404).json({ error: "Transação não encontrada" });
+    }
+  };
+
+  buscarPorInstituicao = async (req, res) => {
+    try {
+      const transacoes = await this.transacaoService.buscarPorInstituicao(
+        req.params.id,
+        req.query.instituicao,
+      );
+      res.status(200).json(transacoes);
+    } catch (error) {
+      res.status(404).json({ error: "Transação não encontrada" });
+    }
+  };
+
   listar = async (req, res) => {
     const transacoes = await this.transacaoService.listar();
     res.status(200).json(transacoes);

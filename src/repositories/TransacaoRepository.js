@@ -1,8 +1,17 @@
 import Transacao from "../models/Transacao.js";
+import { Op } from "sequelize";
 
 export default class TransacaoRepository {
   async criar(conta) {
     return await Transacao.create(conta);
+  }
+
+  async buscarPorUsuario(conta_ids) {
+    return await Transacao.findAll({
+      where: {
+        conta_id: { [Op.in]: conta_ids },
+      },
+    });
   }
 
   async buscarPorId(id) {
