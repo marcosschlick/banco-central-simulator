@@ -9,6 +9,13 @@ export default class UsuarioRepository {
     return await Usuario.findByPk(id);
   }
 
+  async buscarNomePorId(id) {
+    return await Usuario.findOne({
+      where: { id },
+      attributes: ["nome"],
+    });
+  }
+
   async listar() {
     return await Usuario.findAll();
   }

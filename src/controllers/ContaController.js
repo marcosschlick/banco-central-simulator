@@ -15,10 +15,57 @@ export default class ContaController {
     }
   };
 
+  criarComId = async (req, res) => {
+    try {
+      const usuario_id = req.params.id;
+      const { instituicao_id, saldo, credito_limite, credito_disponivel } =
+        req.body;
+      const novaConta = {
+        usuario_id,
+        instituicao_id,
+        saldo,
+        credito_limite,
+        credito_disponivel,
+      };
+      const contaCriada = await this.contaService.criar(novaConta);
+      console.log(contaCriada);
+      res.status(201).json(contaCriada);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
   buscarPorId = async (req, res) => {
     try {
       const conta = await this.contaService.buscarPorId(req.params.id);
       res.status(200).json(conta);
+    } catch (error) {
+      res.status(404).json({ error: "Conta não encontrada" });
+    }
+  };
+
+  buscarPorUsuario = async (req, res) => {
+    try {
+      const usuario = await this.contaService.buscarPorUsuario(req.params.id);
+      res.status(200).json(usuario);
+    } catch (error) {
+      res.status(404).json({ error: "Conta não encontrada" });
+    }
+  };
+
+  buscarSaldos = async (req, res) => {
+    try {
+      const usuario = await this.contaService.buscarSaldos(req.params.id);
+      res.status(200).json(usuario);
+    } catch (error) {
+      res.status(404).json({ error: "Conta não encontrada" });
+    }
+  };
+
+  buscarSaldoTotal = async (req, res) => {
+    try {
+      const saldo = await this.contaService.buscarSaldoTotal(req.params.id);
+      res.status(200).json(saldo);
     } catch (error) {
       res.status(404).json({ error: "Conta não encontrada" });
     }

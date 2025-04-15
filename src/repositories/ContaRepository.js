@@ -9,6 +9,17 @@ export default class ContaRepository {
     return await Conta.findByPk(id);
   }
 
+  async buscarPorUsuario(usuario_id) {
+    return await Conta.findAll({ where: { usuario_id } });
+  }
+
+  async buscarSaldoPorUsuario(usuario_id) {
+    return await Conta.findAll({
+      where: { usuario_id },
+      attributes: ["saldo", "instituicao_id"],
+    });
+  }
+
   async listar() {
     return await Conta.findAll();
   }

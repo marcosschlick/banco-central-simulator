@@ -9,6 +9,13 @@ export default class InstituicaoRepository {
     return await Instituicao.findByPk(id);
   }
 
+  async buscarNomePorId(id) {
+    return await Instituicao.findOne({
+      where: { id },
+      attributes: ["nome"],
+    });
+  }
+
   async listar() {
     return await Instituicao.findAll();
   }
