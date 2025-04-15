@@ -1,4 +1,5 @@
 import Instituicao from "../models/Instituicao.js";
+import { Op } from "sequelize";
 
 export default class InstituicaoRepository {
   async criar(conta) {
@@ -13,6 +14,22 @@ export default class InstituicaoRepository {
     return await Instituicao.findOne({
       where: { id },
       attributes: ["nome"],
+    });
+  }
+
+  async buscarIdPorNome(nome) {
+    const nomeNormalizado = nome
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+
+    return await Instituicao.findOne({
+      where: {
+        nome: {
+          [Op.iLike]: `%${nomeNormalizado}%`,
+        },
+      },
+      attributes: ["id", "nome"],
     });
   }
 

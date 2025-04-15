@@ -14,7 +14,8 @@ router.put("/:id", usuarioController.atualizar);
 router.delete("/:id", usuarioController.remover);
 
 router.post("/:id/contas", contaController.criarComId);
-router.get("/:id/saldo", contaController.buscarSaldoTotal);
+router.get("/:id/total", contaController.buscarSaldoTotal);
+router.get("/:id/saldo", contaController.buscarSaldoPorInstituicao);
 router.get("/:id/saldos", contaController.buscarSaldos);
 
 export { router as usuarioRoutes };

@@ -53,6 +53,24 @@ export default class ContaService {
     };
   }
 
+  async buscarSaldoPorInstituicao(usuario_id, instituicao_nome) {
+    const nomeUsuario =
+      await this.usuarioRepository.buscarNomePorId(usuario_id);
+    const { id, nome } =
+      await this.instituicaoRepository.buscarIdPorNome(instituicao_nome);
+
+    const saldo = await this.contaRepository.buscarSaldoPorInstituicao(
+      usuario_id,
+      id,
+    );
+
+    return {
+      dono: nomeUsuario.nome,
+      banco: nome,
+      saldo: saldo.saldo,
+    };
+  }
+
   async listar() {
     return await this.contaRepository.listar();
   }

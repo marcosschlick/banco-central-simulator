@@ -71,6 +71,18 @@ export default class ContaController {
     }
   };
 
+  buscarSaldoPorInstituicao = async (req, res) => {
+    try {
+      const saldo = await this.contaService.buscarSaldoPorInstituicao(
+        req.params.id,
+        req.query.instituicao,
+      );
+      res.status(200).json(saldo);
+    } catch (error) {
+      res.status(404).json({ error: "Conta não encontrada" });
+    }
+  };
+
   listar = async (req, res) => {
     const contas = await this.contaService.listar();
     res.status(200).json(contas);

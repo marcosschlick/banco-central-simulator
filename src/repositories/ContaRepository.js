@@ -20,6 +20,13 @@ export default class ContaRepository {
     });
   }
 
+  async buscarSaldoPorInstituicao(usuario_id, instituicao_id) {
+    return await Conta.findOne({
+      where: { usuario_id, instituicao_id },
+      attributes: ["saldo"],
+    });
+  }
+
   async listar() {
     return await Conta.findAll();
   }
