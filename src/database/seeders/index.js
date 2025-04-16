@@ -1,17 +1,17 @@
-import "../../models/index.js";
-import seedUsuarios from "./initialUsuario.js";
-import seedInstituicoes from "./initialInstituicao.js";
-import seedContas from "./initialConta.js";
+import "../../app/models/index.js";
+import seedAccounts from "./initialAccount.js";
+import seedInstitutions from "./initialInstitution.js";
+import seedUsers from "./initialUser.js";
 
 async function runAllSeeds() {
   try {
-    await seedInstituicoes();
-    await seedUsuarios();
-    await seedContas();
+    await seedInstitutions();
+    await seedUsers();
+    await seedAccounts();
 
-    console.log("Todos seeds executados com sucesso!");
+    console.log("All seeds executed successfully!");
   } catch (error) {
-    console.error("Erro ao executar seeds:", error);
+    console.error("Error running seeds:", error);
   } finally {
     process.exit(0);
   }

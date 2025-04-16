@@ -1,6 +1,6 @@
 import { Sequelize, Model } from "sequelize";
 
-class Usuario extends Model {
+class Institution extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -9,21 +9,20 @@ class Usuario extends Model {
           primaryKey: true,
           autoIncrement: true,
         },
-        cpf: {
-          type: Sequelize.STRING(11),
+        code: {
+          type: Sequelize.STRING(3),
           allowNull: false,
           unique: true,
-          validate: { len: [11, 11] },
         },
-        nome: {
+        name: {
           type: Sequelize.STRING(100),
           allowNull: false,
         },
       },
       {
         sequelize,
-        modelName: "Usuario",
-        tableName: "usuario",
+        modelName: "Institution",
+        tableName: "institutions",
         timestamps: true,
       },
     );
@@ -32,11 +31,11 @@ class Usuario extends Model {
   }
 
   static associate(models) {
-    this.hasMany(models.Conta, {
-      foreignKey: "usuario_id",
-      as: "contas",
+    this.hasMany(models.Account, {
+      foreignKey: "institution_id",
+      as: "accounts",
     });
   }
 }
 
-export default Usuario;
+export default Institution;

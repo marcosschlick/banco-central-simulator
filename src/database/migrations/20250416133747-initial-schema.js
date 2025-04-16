@@ -22,7 +22,7 @@ const commonFields = {
 
 export default {
   async up(queryInterface) {
-    await queryInterface.createTable("usuario", {
+    await queryInterface.createTable("users", {
       ...commonFields,
       cpf: {
         type: DataTypes.STRING(11),
@@ -30,94 +30,94 @@ export default {
         unique: true,
         validate: { len: [11, 11] },
       },
-      nome: {
+      name: {
         type: DataTypes.STRING(100),
         allowNull: false,
       },
     });
 
-    await queryInterface.createTable("instituicao", {
+    await queryInterface.createTable("institutions", {
       ...commonFields,
-      codigo: {
+      code: {
         type: DataTypes.STRING(3),
         allowNull: false,
         unique: true,
       },
-      nome: {
+      name: {
         type: DataTypes.STRING(100),
         allowNull: false,
       },
     });
 
-    await queryInterface.createTable("conta", {
+    await queryInterface.createTable("accounts", {
       ...commonFields,
-      saldo: {
+      balance: {
         type: DataTypes.DECIMAL(15, 2),
         defaultValue: 0,
         allowNull: false,
         validate: { min: 0 },
       },
-      credito_limite: {
+      credit_limit: {
         type: DataTypes.DECIMAL(15, 2),
         defaultValue: 0,
         allowNull: false,
         validate: { min: 0 },
       },
-      credito_disponivel: {
+      credit_available: {
         type: DataTypes.DECIMAL(15, 2),
         defaultValue: 0,
         allowNull: false,
         validate: { min: 0 },
       },
-      usuario_id: {
+      user_id: {
         type: DataTypes.INTEGER,
-        references: { model: "usuario", key: "id" },
+        references: { model: "users", key: "id" },
       },
-      instituicao_id: {
+      institution_id: {
         type: DataTypes.INTEGER,
-        references: { model: "instituicao", key: "id" },
+        references: { model: "institutions", key: "id" },
       },
     });
 
-    await queryInterface.addConstraint("conta", {
-      fields: ["usuario_id", "instituicao_id"],
+    await queryInterface.addConstraint("accounts", {
+      fields: ["user_id", "institution_id"],
       type: "unique",
-      name: "unique_conta_usuario_instituicao",
+      name: "unique_account_user_institution",
     });
 
-    await queryInterface.createTable("transacao", {
+    await queryInterface.createTable("transactions", {
       ...commonFields,
-      tipo: {
-        type: DataTypes.ENUM("debito", "credito"),
+      type: {
+        type: DataTypes.ENUM("debit", "credit"),
         allowNull: false,
       },
-      valor: {
+      amount: {
         type: DataTypes.DECIMAL(15, 2),
         allowNull: false,
         validate: { min: 0.01 },
       },
-      data: {
+      date: {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW,
       },
-      conta_origem: {
+      origin_account_id: {
         type: DataTypes.INTEGER,
-        references: { model: "conta", key: "id" },
+        references: { model: "accounts", key: "id" },
         allowNull: false,
       },
-      conta_destino: {
+      destination_account_id: {
         type: DataTypes.INTEGER,
-        references: { model: "conta", key: "id" },
+        references: { model: "accounts", key: "id" },
         allowNull: true,
       },
     });
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable("transacao");
-    await queryInterface.dropTable("conta");
-    await queryInterface.dropTable("instituicao");
-    await queryInterface.dropTable("usuario");
+    await queryInterface.dropTable("transactions");
+    await queryInterface.dropTable("accounts");
+    await queryInterface.dropTable("institutions");
+    await queryInterface.dropTable("users");
   },
 };

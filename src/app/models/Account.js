@@ -1,6 +1,6 @@
 import { Sequelize, Model } from "sequelize";
 
-class Conta extends Model {
+class Account extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -9,19 +9,19 @@ class Conta extends Model {
           primaryKey: true,
           autoIncrement: true,
         },
-        saldo: {
+        balance: {
           type: Sequelize.DECIMAL(15, 2),
           defaultValue: 0,
           allowNull: false,
           validate: { min: 0 },
         },
-        credito_limite: {
+        credit_limit: {
           type: Sequelize.DECIMAL(15, 2),
           defaultValue: 0,
           allowNull: false,
           validate: { min: 0 },
         },
-        credito_disponivel: {
+        credit_available: {
           type: Sequelize.DECIMAL(15, 2),
           defaultValue: 0,
           allowNull: false,
@@ -30,8 +30,8 @@ class Conta extends Model {
       },
       {
         sequelize,
-        modelName: "Conta",
-        tableName: "conta",
+        modelName: "Account",
+        tableName: "accounts",
         timestamps: true,
       },
     );
@@ -40,26 +40,26 @@ class Conta extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Usuario, {
-      foreignKey: "usuario_id",
-      as: "usuario",
+    this.belongsTo(models.User, {
+      foreignKey: "user_id",
+      as: "user",
     });
 
-    this.belongsTo(models.Instituicao, {
-      foreignKey: "instituicao_id",
-      as: "instituicao",
+    this.belongsTo(models.Institution, {
+      foreignKey: "institution_id",
+      as: "institution",
     });
 
-    this.hasMany(models.Transacao, {
-      foreignKey: "conta_origem",
-      as: "transacoes_enviadas",
+    this.hasMany(models.Transaction, {
+      foreignKey: "origin_account_id",
+      as: "outgoing_transactions",
     });
 
-    this.hasMany(models.Transacao, {
-      foreignKey: "conta_destino",
-      as: "transacoes_recebidas",
+    this.hasMany(models.Transaction, {
+      foreignKey: "destination_account_id",
+      as: "incoming_transactions",
     });
   }
 }
 
-export default Conta;
+export default Account;
