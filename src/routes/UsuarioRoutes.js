@@ -1,7 +1,7 @@
 import express from "express";
-import UsuarioController from "../controllers/UsuarioController.js";
-import ContaController from "../controllers/ContaController.js";
-import TransacaoController from "../controllers/TransacaoController.js";
+import UsuarioController from "../app/controllers/UsuarioController.js";
+import ContaController from "../app/controllers/ContaController.js";
+import TransacaoController from "../app/controllers/TransacaoController.js";
 
 const router = express.Router();
 

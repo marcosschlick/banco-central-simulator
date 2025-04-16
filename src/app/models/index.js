@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-import databaseConfig from "../config/database.cjs";
+import databaseConfig from "../../config/database.cjs";
 
 import Conta from "../models/Conta.js";
 import Instituicao from "../models/Instituicao.js";

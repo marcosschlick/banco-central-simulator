@@ -1,5 +1,5 @@
 import express from "express";
-import ContaController from "../controllers/ContaController.js";
+import ContaController from "../app/controllers/ContaController.js";
 
 const router = express.Router();
 
