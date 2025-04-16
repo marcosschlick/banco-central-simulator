@@ -71,4 +71,33 @@ export default class TransacaoController {
       res.status(404).json({ error: "Transação não encontrada" });
     }
   };
+
+  movimentar = async (req, res) => {
+    try {
+      const { tipo } = req.body;
+
+      let transacaoCriada;
+      switch (tipo.toLowerCase()) {
+        case "credito":
+          transacaoCriada = await this.transacaoService.creditarComInstituicao(
+            req.params.id,
+            req.body,
+            req.query.instituicao,
+          );
+          break;
+        case "debito":
+          transacaoCriada = await this.transacaoService.debitarComInstituicao(
+            req.params.id,
+            req.body,
+            req.query.instituicao,
+          );
+          break;
+        default:
+          throw new Error(`Tipo de movimentação inválido: ${tipo}`);
+      }
+      res.status(201).json(transacaoCriada);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
 }

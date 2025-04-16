@@ -21,5 +21,6 @@ router.get("/:id/saldo", contaController.buscarSaldoPorInstituicao);
 router.get("/:id/saldos", contaController.buscarSaldos);
 router.get("/:id/extratos", transacaoController.buscarPorUsuario);
 router.get("/:id/extrato", transacaoController.buscarPorInstituicao);
+router.post("/:id/transacoes", transacaoController.movimentar);
 
 export { router as usuarioRoutes };

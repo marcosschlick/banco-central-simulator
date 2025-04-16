@@ -32,6 +32,8 @@ export default class ContaService {
       resultados.push({
         nome,
         saldo: item.saldo,
+        creditoLimite: item.credito_limite,
+        creditoDisponivel: item.credito_disponivel,
         instituicao,
       });
     }

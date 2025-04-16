@@ -61,4 +61,66 @@ export default class TransacaoService {
   async remover(id) {
     await this.transacaoRepository.remover(id);
   }
+
+  async debitarComInstituicao(id, dados, instituicao) {
+    const contas = await this.contaRepository.buscarPorUsuario(id);
+    const valor = dados.valor;
+    const { id: instituicao_id } =
+      await this.instituicaoRepository.buscarIdPorNome(instituicao);
+
+    if (!instituicao_id) {
+      throw new Error("Instituição não encontrada");
+    }
+
+    const conta = contas.find((a) => a.instituicao_id === instituicao_id);
+
+    if (!conta) {
+      throw new Error("Conta na instituição especificada não encontrada");
+    }
+    const transacao = {
+      conta_origem: conta.id,
+      valor: dados.valor,
+      tipo: dados.tipo,
+      conta_destino: dados.conta_destino,
+    };
+
+    if (conta.saldo >= valor) {
+      await this.contaRepository.pagarDebito(conta.id, valor);
+      await this.contaRepository.receber(dados.conta_destino, valor);
+      return await this.transacaoRepository.criar(transacao);
+    } else {
+      throw new Error("Saldo insuficiente");
+    }
+  }
+
+  async creditarComInstituicao(id, dados, instituicao) {
+    const contas = await this.contaRepository.buscarPorUsuario(id);
+    const valor = dados.valor;
+    const { id: instituicao_id } =
+      await this.instituicaoRepository.buscarIdPorNome(instituicao);
+
+    if (!instituicao_id) {
+      throw new Error("Instituição não encontrada");
+    }
+
+    const conta = contas.find((a) => a.instituicao_id === instituicao_id);
+
+    if (!conta) {
+      throw new Error("Conta na instituição especificada não encontrada");
+    }
+    const transacao = {
+      conta_origem: conta.id,
+      valor: dados.valor,
+      tipo: dados.tipo,
+      conta_destino: dados.conta_destino,
+    };
+
+    if (conta.credito_disponivel >= valor) {
+      await this.contaRepository.pagarCredito(conta.id, valor);
+      await this.contaRepository.receber(dados.conta_destino, valor);
+      return await this.transacaoRepository.criar(transacao);
+    } else {
+      throw new Error("credito insuficiente");
+    }
+  }
 }
