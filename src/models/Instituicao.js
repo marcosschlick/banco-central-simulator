@@ -5,9 +5,9 @@ class Instituicao extends Model {
     super.init(
       {
         id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           primaryKey: true,
-          defaultValue: Sequelize.UUIDV4,
+          autoIncrement: true,
         },
         codigo: {
           type: Sequelize.STRING(3),
@@ -23,7 +23,7 @@ class Instituicao extends Model {
         sequelize,
         modelName: "Instituicao",
         tableName: "instituicao",
-        timestamps: false,
+        timestamps: true,
       },
     );
 

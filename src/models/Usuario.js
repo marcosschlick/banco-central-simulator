@@ -5,14 +5,15 @@ class Usuario extends Model {
     super.init(
       {
         id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           primaryKey: true,
-          defaultValue: Sequelize.UUIDV4,
+          autoIncrement: true,
         },
         cpf: {
           type: Sequelize.STRING(11),
           allowNull: false,
           unique: true,
+          validate: { len: [11, 11] },
         },
         nome: {
           type: Sequelize.STRING(100),
@@ -23,7 +24,7 @@ class Usuario extends Model {
         sequelize,
         modelName: "Usuario",
         tableName: "usuario",
-        timestamps: false,
+        timestamps: true,
       },
     );
 

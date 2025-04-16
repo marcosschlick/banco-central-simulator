@@ -5,33 +5,34 @@ class Conta extends Model {
     super.init(
       {
         id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           primaryKey: true,
-          defaultValue: Sequelize.UUIDV4,
+          autoIncrement: true,
         },
         saldo: {
           type: Sequelize.DECIMAL(15, 2),
+          defaultValue: 0,
           allowNull: false,
+          validate: { min: 0 },
         },
         credito_limite: {
           type: Sequelize.DECIMAL(15, 2),
+          defaultValue: 0,
           allowNull: false,
+          validate: { min: 0 },
         },
         credito_disponivel: {
           type: Sequelize.DECIMAL(15, 2),
+          defaultValue: 0,
           allowNull: false,
+          validate: { min: 0 },
         },
       },
       {
         sequelize,
         modelName: "Conta",
         tableName: "conta",
-        timestamps: false,
-        uniqueKeys: {
-          unique_user_institution: {
-            fields: ["usuario_id", "instituicao_id"],
-          },
-        },
+        timestamps: true,
       },
     );
 
@@ -50,8 +51,13 @@ class Conta extends Model {
     });
 
     this.hasMany(models.Transacao, {
-      foreignKey: "conta_id",
-      as: "transacoes",
+      foreignKey: "conta_origem",
+      as: "transacoes_enviadas",
+    });
+
+    this.hasMany(models.Transacao, {
+      foreignKey: "conta_destino",
+      as: "transacoes_recebidas",
     });
   }
 }

@@ -5,31 +5,30 @@ class Transacao extends Model {
     super.init(
       {
         id: {
-          type: Sequelize.UUID,
+          type: Sequelize.INTEGER,
           primaryKey: true,
-          defaultValue: Sequelize.UUIDV4,
-        },
-        codigo: {
-          type: Sequelize.STRING(15),
+          autoIncrement: true,
         },
         tipo: {
-          type: Sequelize.ENUM("debito", "credito", "transferencia"),
+          type: Sequelize.ENUM("debito", "credito"),
           allowNull: false,
         },
         valor: {
           type: Sequelize.DECIMAL(15, 2),
           allowNull: false,
+          validate: { min: 0.01 },
         },
         data: {
           type: Sequelize.DATE,
           allowNull: false,
+          defaultValue: Sequelize.NOW,
         },
       },
       {
         sequelize,
         modelName: "Transacao",
         tableName: "transacao",
-        timestamps: false,
+        timestamps: true,
       },
     );
 
@@ -38,15 +37,13 @@ class Transacao extends Model {
 
   static associate(models) {
     this.belongsTo(models.Conta, {
-      foreignKey: "conta_id",
-      as: "conta_origem",
-      onDelete: "CASCADE",
+      foreignKey: "conta_origem",
+      as: "origem",
     });
 
     this.belongsTo(models.Conta, {
-      foreignKey: "conta_id",
-      as: "conta_destino",
-      onDelete: "SET NULL",
+      foreignKey: "conta_destino",
+      as: "destino",
     });
   }
 }

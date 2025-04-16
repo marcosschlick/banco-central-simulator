@@ -1,18 +1,34 @@
-import { DataTypes } from "sequelize";
+import { Sequelize, DataTypes } from "sequelize";
+
+const commonFields = {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: Sequelize.NOW,
+    field: "created_at",
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: Sequelize.NOW,
+    field: "updated_at",
+  },
+};
 
 export default {
   async up(queryInterface) {
-    // tabela usuario
     await queryInterface.createTable("usuario", {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        defaultValue: DataTypes.UUIDV4,
-      },
+      ...commonFields,
       cpf: {
         type: DataTypes.STRING(11),
         allowNull: false,
         unique: true,
+        validate: { len: [11, 11] },
       },
       nome: {
         type: DataTypes.STRING(100),
@@ -20,13 +36,8 @@ export default {
       },
     });
 
-    // tabela instituicao
     await queryInterface.createTable("instituicao", {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        defaultValue: DataTypes.UUIDV4,
-      },
+      ...commonFields,
       codigo: {
         type: DataTypes.STRING(3),
         allowNull: false,
@@ -38,83 +49,67 @@ export default {
       },
     });
 
-    // tabela conta
     await queryInterface.createTable("conta", {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        defaultValue: DataTypes.UUIDV4,
-      },
+      ...commonFields,
       saldo: {
         type: DataTypes.DECIMAL(15, 2),
+        defaultValue: 0,
         allowNull: false,
+        validate: { min: 0 },
       },
       credito_limite: {
         type: DataTypes.DECIMAL(15, 2),
+        defaultValue: 0,
         allowNull: false,
+        validate: { min: 0 },
       },
       credito_disponivel: {
         type: DataTypes.DECIMAL(15, 2),
+        defaultValue: 0,
         allowNull: false,
+        validate: { min: 0 },
       },
       usuario_id: {
-        type: DataTypes.UUID,
-        references: {
-          model: "usuario",
-          key: "id",
-        },
+        type: DataTypes.INTEGER,
+        references: { model: "usuario", key: "id" },
       },
       instituicao_id: {
-        type: DataTypes.UUID,
-        references: {
-          model: "instituicao",
-          key: "id",
-        },
+        type: DataTypes.INTEGER,
+        references: { model: "instituicao", key: "id" },
       },
     });
 
-    // índice único composto para conta
     await queryInterface.addConstraint("conta", {
       fields: ["usuario_id", "instituicao_id"],
       type: "unique",
-      name: "unique_user_institution",
+      name: "unique_conta_usuario_instituicao",
     });
 
-    // tabela transacao
     await queryInterface.createTable("transacao", {
-      id: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        defaultValue: DataTypes.UUIDV4,
-      },
-      codigo: {
-        type: DataTypes.STRING(15),
-      },
+      ...commonFields,
       tipo: {
-        type: DataTypes.ENUM("debito", "credito", "transferencia"),
+        type: DataTypes.ENUM("debito", "credito"),
         allowNull: false,
       },
       valor: {
         type: DataTypes.DECIMAL(15, 2),
         allowNull: false,
+        validate: { min: 0.01 },
       },
       data: {
         type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: Sequelize.NOW,
       },
-      conta_id: {
-        type: DataTypes.UUID,
-        references: {
-          model: "conta",
-          key: "id",
-        },
+      conta_origem: {
+        type: DataTypes.INTEGER,
+        references: { model: "conta", key: "id" },
+        allowNull: false,
       },
       conta_destino: {
-        type: DataTypes.UUID,
-        references: {
-          model: "conta",
-          key: "id",
-        },
+        type: DataTypes.INTEGER,
+        references: { model: "conta", key: "id" },
+        allowNull: true,
       },
     });
   },
