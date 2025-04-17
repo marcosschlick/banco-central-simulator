@@ -16,7 +16,9 @@ export default class InstitutionController {
 
   getById = async (req, res) => {
     try {
-      const institution = await this.institutionService.findById(req.params.id);
+      const institution = await this.institutionService.findById(
+        req.params.institutionId,
+      );
       res.status(200).json(institution);
     } catch (error) {
       res.status(404).json({ error: "Institution not found" });
@@ -31,7 +33,7 @@ export default class InstitutionController {
   update = async (req, res) => {
     try {
       const updatedInstitution = await this.institutionService.update(
-        req.params.id,
+        req.params.institutionId,
         req.body,
       );
       res.status(200).json(updatedInstitution);
@@ -42,7 +44,7 @@ export default class InstitutionController {
 
   delete = async (req, res) => {
     try {
-      await this.institutionService.delete(req.params.id);
+      await this.institutionService.delete(req.params.institutionId);
       res.status(204).send();
     } catch (error) {
       res.status(404).json({ error: "Institution not found" });
