@@ -1,0 +1,35 @@
+### Create account
+POST http://localhost:3333/accounts
+Content-Type: application/json
+
+{
+  "user_id": ":userId",
+  "institution_id": ":institutionId",
+  "balance": 1000,
+  "credit_limit": 100,
+  "credit_available": 90
+}
+
+### Get account by ID
+GET http://localhost:3333/accounts/:accountId
+Content-Type: application/json
+
+### Get accounts by user
+GET http://localhost:3333/accounts/:accountId/user
+Content-Type: application/json
+
+### List all accounts
+GET http://localhost:3333/accounts
+Content-Type: application/json
+
+### Update account
+PUT http://localhost:3333/accounts/:accountId
+Content-Type: application/json
+
+{
+  "balance": 1500
+}
+
+### Delete account
+DELETE http://localhost:3333/accounts/:accountId
+Content-Type: application/json

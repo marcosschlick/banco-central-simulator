@@ -1,0 +1,79 @@
+### Create user
+POST http://localhost:3333/users
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "cpf": "00000000000"
+}
+
+### Get user by ID
+GET http://localhost:3333/users/:userId
+Content-Type: application/json
+
+### List all users
+GET http://localhost:3333/users
+Content-Type: application/json
+
+### Update user
+PUT http://localhost:3333/users/:userId
+Content-Type: application/json
+
+{
+  "name": "Updated Name"
+}
+
+### Delete user
+DELETE http://localhost:3333/users/:userId
+Content-Type: application/json
+
+### Create account for user
+POST http://localhost:3333/users/:userId/accounts
+Content-Type: application/json
+
+{
+  "institution_id": ":institutionId",
+  "balance": 2,
+  "credit_limit": "1000.00",
+  "credit_available": "500.00"
+}
+
+### Get user balances
+GET http://localhost:3333/users/:userId/balances
+Content-Type: application/json
+
+### Get total balance
+GET http://localhost:3333/users/:userId/balance/total
+Content-Type: application/json
+
+### Get balance by institution
+GET http://localhost:3333/users/:userId/balance?institution=bras
+Content-Type: application/json
+
+### Get user transactions
+GET http://localhost:3333/users/:userId/transactions
+Content-Type: application/json
+
+### Get transactions by institution
+GET http://localhost:3333/users/:userId/transaction?institution=bras
+Content-Type: application/json
+
+### Debit transaction
+POST http://localhost:3333/users/:userId/transactions?institution=bras
+Content-Type: application/json
+
+{
+  "amount": 62,
+  "type": "debit",
+  "destination_account_id": ":accountId"
+}
+
+### Credit transaction
+POST http://localhost:3333/users/:userId/transactions?institution=bras
+Content-Type: application/json
+
+{
+  "amount": 28,
+  "type": "credit",
+  "destination_account_id": ":accountId"
+}
