@@ -2,8 +2,8 @@ import app from "./app.js";
 import "dotenv/config";
 import "./app/models/index.js";
 
-const PORT = process.env.SV_PORT;
+const PORT = process.env.SV_PORT || 3333;
 
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
