@@ -65,6 +65,11 @@ export default class AccountRepository {
     return this.findById(accountId);
   }
 
+  async update(id, updateData) {
+    await Account.update(updateData, { where: { id } });
+    return await Account.findByPk(id);
+  }
+
   async delete(id) {
     await Account.destroy({ where: { id } });
   }

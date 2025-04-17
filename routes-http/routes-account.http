@@ -15,7 +15,7 @@ GET http://localhost:3333/accounts/:accountId
 Content-Type: application/json
 
 ### Get accounts by user
-GET http://localhost:3333/accounts/:accountId/user
+GET http://localhost:3333/accounts/:userId/user
 Content-Type: application/json
 
 ### List all accounts
