@@ -47,6 +47,7 @@ export default {
       name: {
         type: DataTypes.STRING(100),
         allowNull: false,
+        unique: true,
       },
     });
 
@@ -77,6 +78,7 @@ export default {
           model: "users",
           key: "id",
           onDelete: "CASCADE",
+          onUpdate: "CASCADE",
         },
       },
       institution_id: {
@@ -86,6 +88,7 @@ export default {
           model: "institutions",
           key: "id",
           onDelete: "CASCADE",
+          onUpdate: "CASCADE",
         },
       },
     });
@@ -119,15 +122,17 @@ export default {
           model: "accounts",
           key: "id",
           onDelete: "CASCADE",
+          onUpdate: "CASCADE",
         },
       },
       destination_account_id: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: {
           model: "accounts",
           key: "id",
-          onDelete: "SET NULL",
+          onDelete: "CASCADE",
+          onUpdate: "CASCADE",
         },
       },
     });
