@@ -9,38 +9,38 @@ export default class AccountRepository {
     return await Account.findByPk(id);
   }
 
-  async findByUser(userId) {
+  async findByUserId(userId) {
     return await Account.findAll({
       where: { user_id: userId },
-      attributes: ["id", "institution_id"],
     });
   }
 
-  async listAll() {
+  async findAll() {
     return await Account.findAll();
+  }
+
+  async update(id, updateData) {
+    const [, [updatedAccount]] = await Account.update(updateData, {
+      where: { id },
+      returning: true,
+    });
+    return updatedAccount;
+  }
+
+  async delete(id) {
+    const deletedRows = await Account.destroy({ where: { id } });
+    return deletedRows > 0;
   }
 
   async getBalance(userId) {
     return await Account.findAll({
       where: { user_id: userId },
-      attributes: [
-        "balance",
-        "institution_id",
-        "credit_limit",
-        "credit_available",
-      ],
     });
   }
 
   async getBalanceByInstitution(userId, institutionId) {
     return await Account.findOne({
       where: { user_id: userId, institution_id: institutionId },
-      attributes: [
-        "balance",
-        "institution_id",
-        "credit_limit",
-        "credit_available",
-      ],
     });
   }
 
@@ -63,14 +63,5 @@ export default class AccountRepository {
       { where: { id: accountId } },
     );
     return this.findById(accountId);
-  }
-
-  async update(id, updateData) {
-    await Account.update(updateData, { where: { id } });
-    return await Account.findByPk(id);
-  }
-
-  async delete(id) {
-    await Account.destroy({ where: { id } });
   }
 }

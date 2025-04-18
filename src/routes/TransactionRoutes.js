@@ -5,10 +5,10 @@ const router = express.Router();
 
 const transactionController = new TransactionController();
 
-// Base Transaction routes
+// transaction routes
 router.post("", transactionController.create);
-router.get("/:transactionId", transactionController.getById);
-router.get("", transactionController.getAll);
+router.get("/:transactionId", transactionController.findById);
+router.get("", transactionController.findAll);
 router.put("/:transactionId", transactionController.update);
 router.delete("/:transactionId", transactionController.delete);
 

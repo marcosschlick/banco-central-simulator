@@ -16,43 +16,69 @@ export default class AccountController {
 
   createById = async (req, res) => {
     try {
-      const user_id = req.params.id;
-      const { institution_id, balance, credit_limit, credit_available } =
-        req.body;
-      const newAccount = {
-        user_id,
-        institution_id,
-        balance,
-        credit_limit,
-        credit_available,
-      };
-      const account = await this.accountService.create(newAccount);
-      res.status(201).json(account);
+      const account = await this.accountService.create({
+        ...req.body,
+        user_id: req.params.userId,
+      });
+      return res.status(201).json(account);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      return res.status(400).json({ error: error.message });
     }
   };
 
-  getById = async (req, res) => {
+  findById = async (req, res) => {
     try {
       const account = await this.accountService.findById(req.params.accountId);
       res.status(200).json(account);
     } catch (error) {
-      res.status(404).json({ error: "Account not found" });
+      res
+        .status(error.message.includes("not found") ? 404 : 500)
+        .json({ error: error.message });
     }
   };
 
-  getAll = async (req, res) => {
-    const accounts = await this.accountService.listAll();
-    res.status(200).json(accounts);
-  };
-
-  getByUser = async (req, res) => {
+  findByUserId = async (req, res) => {
     try {
-      const accounts = await this.accountService.findByUser(req.params.userId);
+      const accounts = await this.accountService.findByUserId(
+        req.params.userId,
+      );
       res.status(200).json(accounts);
     } catch (error) {
-      res.status(404).json({ error: "No accounts found" });
+      res
+        .status(error.message.includes("not found") ? 404 : 500)
+        .json({ error: error.message });
+    }
+  };
+
+  findAll = async (req, res) => {
+    try {
+      const accounts = await this.accountService.findAll();
+      res.status(200).json(accounts);
+    } catch (error) {
+      res.status(500).json({ error: "Internal server error" });
+    }
+  };
+
+  update = async (req, res) => {
+    try {
+      const updatedAccount = await this.accountService.update(
+        req.params.accountId,
+        req.body,
+      );
+      res.status(200).json(updatedAccount);
+    } catch (error) {
+      const status = error.message.includes("not found") ? 404 : 400;
+      res.status(status).json({ error: error.message });
+    }
+  };
+
+  delete = async (req, res) => {
+    try {
+      await this.accountService.delete(req.params.accountId);
+      res.status(204).send();
+    } catch (error) {
+      const status = error.message.includes("not found") ? 404 : 500;
+      res.status(status).json({ error: error.message });
     }
   };
 
@@ -85,27 +111,6 @@ export default class AccountController {
       res.status(200).json(balance);
     } catch (error) {
       res.status(404).json({ error: error.message });
-    }
-  };
-
-  update = async (req, res) => {
-    try {
-      const updatedAccount = await this.accountService.update(
-        req.params.accountId,
-        req.body,
-      );
-      res.status(200).json(updatedAccount);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
-  };
-
-  delete = async (req, res) => {
-    try {
-      await this.accountService.delete(req.params.accountId);
-      res.status(204).send();
-    } catch (error) {
-      res.status(404).json({ error: "Account not found" });
     }
   };
 }

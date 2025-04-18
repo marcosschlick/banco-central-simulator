@@ -5,11 +5,11 @@ const router = express.Router();
 
 const accountController = new AccountController();
 
-// Base Account routes
+// account routes
 router.post("", accountController.create);
-router.get("/:accountId", accountController.getById);
-router.get("/:userId/user", accountController.getByUser);
-router.get("", accountController.getAll);
+router.get("/id/:accountId", accountController.findById);
+router.get("/user/:userId", accountController.findByUserId);
+router.get("", accountController.findAll);
 router.put("/:accountId", accountController.update);
 router.delete("/:accountId", accountController.delete);
 

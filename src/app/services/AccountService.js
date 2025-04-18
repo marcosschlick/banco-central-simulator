@@ -14,15 +14,41 @@ export default class AccountService {
   }
 
   async findById(id) {
-    return await this.accountRepository.findById(id);
+    const account = await this.accountRepository.findById(id);
+    if (!account) throw new Error("Account not found");
+    return account;
   }
 
-  async findByUser(userId) {
-    return await this.accountRepository.findByUser(userId);
+  async findByUserId(userId) {
+    return await this.accountRepository.findByUserId(userId);
   }
 
-  async listAll() {
-    return await this.accountRepository.listAll();
+  async findAll() {
+    return await this.accountRepository.findAll();
+  }
+
+  async update(id, updateData) {
+    const updatedAccount = await this.accountRepository.update(id, updateData);
+    if (!updatedAccount) throw new Error("Account not found");
+    return updatedAccount;
+  }
+
+  async delete(id) {
+    const isDeleted = await this.accountRepository.delete(id);
+    if (!isDeleted) throw new Error("Account not found");
+    return true;
+  }
+
+  async getUserTransactions(userId) {
+    const user = await this.userRepository.findById(userId);
+    const accounts = await this.accountRepository.findByUser(userId);
+
+    return {
+      user: user.name,
+      transactions: await this.transactionRepository.findByUser(
+        accounts.map((a) => a.id),
+      ),
+    };
   }
 
   async getBalances(userId) {
@@ -68,29 +94,20 @@ export default class AccountService {
 
   async getBalanceByInstitution(userId, institutionName) {
     const user = await this.userRepository.findById(userId);
-    const institution =
+    const { id: institutionId, name } =
       await this.institutionRepository.findByName(institutionName);
-    if (!institution) throw new Error("Institution not found");
 
     const balance = await this.accountRepository.getBalanceByInstitution(
       userId,
-      institution.id,
+      institutionId,
     );
 
     return {
       user: user.name,
-      institution: institution.name,
+      institution: name,
       balance: balance.balance,
       creditLimit: balance.credit_limit,
       creditAvailable: balance.credit_available,
     };
-  }
-
-  async update(id, updateData) {
-    return await this.accountRepository.update(id, updateData);
-  }
-
-  async delete(id) {
-    await this.accountRepository.delete(id);
   }
 }

@@ -17,6 +17,7 @@ class Institution extends Model {
         name: {
           type: Sequelize.STRING(100),
           allowNull: false,
+          unique: true,
         },
       },
       {

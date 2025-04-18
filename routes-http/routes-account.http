@@ -1,4 +1,4 @@
-### Create account
+### create account
 POST http://localhost:3333/accounts
 Content-Type: application/json
 
@@ -10,26 +10,28 @@ Content-Type: application/json
   "credit_available": 90
 }
 
-### Get account by ID
-GET http://localhost:3333/accounts/:accountId
+### find account by id
+GET http://localhost:3333/accounts/id/:accountId
 Content-Type: application/json
 
-### Get accounts by user
-GET http://localhost:3333/accounts/:userId/user
+### find accounts by user
+GET http://localhost:3333/accounts/user/:userId
 Content-Type: application/json
 
-### List all accounts
+### find all accounts
 GET http://localhost:3333/accounts
 Content-Type: application/json
 
-### Update account
+### update account
 PUT http://localhost:3333/accounts/:accountId
 Content-Type: application/json
 
 {
-  "balance": 1500
+  "balance": 1500,
+  "credit_limit": "1000.00",
+  "credit_available": "500.00"
 }
 
-### Delete account
+### delete account
 DELETE http://localhost:3333/accounts/:accountId
 Content-Type: application/json
