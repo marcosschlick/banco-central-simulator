@@ -6,22 +6,45 @@ export default class InstitutionService {
   }
 
   async create(institutionData) {
-    return await this.institutionRepository.create(institutionData);
+    const existingInstitution = await this.institutionRepository.findByCode(
+      institutionData.code,
+    );
+    if (existingInstitution) throw new Error("Code already registered");
+    return this.institutionRepository.create(institutionData);
   }
 
   async findById(id) {
     return await this.institutionRepository.findById(id);
   }
 
-  async listAll() {
-    return await this.institutionRepository.listAll();
+  async findByCode(code) {
+    return await this.institutionRepository.findByCode(code);
+  }
+
+  async findAll() {
+    return await this.institutionRepository.findAll();
   }
 
   async update(id, updateData) {
-    return await this.institutionRepository.update(id, updateData);
+    if (updateData.code) {
+      const existingInstitution = await this.institutionRepository.findByCode(
+        updateData.code,
+      );
+      if (existingInstitution && existingInstitution.id !== id) {
+        throw new Error("Code already registered");
+      }
+    }
+    const updatedInstitution = await this.institutionRepository.update(
+      id,
+      updateData,
+    );
+    if (!updatedInstitution) throw new Error("Institution not found");
+    return updatedInstitution;
   }
 
   async delete(id) {
-    await this.institutionRepository.delete(id);
+    const isDeleted = await this.institutionRepository.delete(id);
+    if (!isDeleted) throw new Error("Institution not found");
+    return true;
   }
 }

@@ -10,6 +10,10 @@ export default class InstitutionRepository {
     return await Institution.findByPk(id);
   }
 
+  async findByCode(code) {
+    return await Institution.findOne({ where: { code } });
+  }
+
   async findByName(searchName) {
     const normalizedName = searchName
       .normalize("NFD")
@@ -18,22 +22,27 @@ export default class InstitutionRepository {
 
     return await Institution.findOne({
       where: {
-        name: { [Op.iLike]: `%${normalizedName}%` },
+        name: {
+          [Op.iLike]: `%${normalizedName}%`,
+        },
       },
-      attributes: ["id", "name"],
     });
   }
 
-  async listAll() {
+  async findAll() {
     return await Institution.findAll();
   }
 
   async update(id, updateData) {
-    await Institution.update(updateData, { where: { id } });
-    return await Institution.findByPk(id);
+    const [, [updatedInstitution]] = await Institution.update(updateData, {
+      where: { id },
+      returning: true,
+    });
+    return updatedInstitution;
   }
 
   async delete(id) {
-    await Institution.destroy({ where: { id } });
+    const deletedRows = await Institution.destroy({ where: { id } });
+    return deletedRows > 0;
   }
 }

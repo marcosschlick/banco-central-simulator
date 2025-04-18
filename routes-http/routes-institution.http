@@ -1,17 +1,21 @@
-### Create institution
+### create institution
 POST http://localhost:3333/institutions
 Content-Type: application/json
 
 {
-  "name": "Central Bank",
-  "code": "001"
+  "name": "Banco para Testes",
+  "code": "666"
 }
 
-### Get institution by ID
-GET http://localhost:3333/institutions/:institutionId
+### find institution by id
+GET http://localhost:3333/institutions/id/:institutionId
 Content-Type: application/json
 
-### List all institutions
+### find institution by code
+GET http://localhost:3333/institutions/code/:institutionCode
+Content-Type: application/json
+
+### find all institutions
 GET http://localhost:3333/institutions
 Content-Type: application/json
 
@@ -20,9 +24,10 @@ PUT http://localhost:3333/institutions/:institutionId
 Content-Type: application/json
 
 {
-  "name": "New Bank Name"
+  "name": "New Bank Name",
+  "code": "666"
 }
 
-### Delete institution
+### delete institution
 DELETE http://localhost:3333/institutions/:institutionId
 Content-Type: application/json

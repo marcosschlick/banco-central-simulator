@@ -5,10 +5,11 @@ const router = express.Router();
 
 const institutionController = new InstitutionController();
 
-// Base Institution routes
+// institution routes
 router.post("", institutionController.create);
-router.get("/:institutionId", institutionController.getById);
-router.get("", institutionController.getAll);
+router.get("/id/:institutionId", institutionController.findById);
+router.get("/code/:institutionCode", institutionController.findByCode);
+router.get("", institutionController.findAll);
 router.put("/:institutionId", institutionController.update);
 router.delete("/:institutionId", institutionController.delete);
 
