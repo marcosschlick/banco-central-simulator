@@ -1,30 +1,33 @@
-### Create transaction
+### create transaction
 POST http://localhost:3333/transactions
 Content-Type: application/json
 
 {
   "amount": 150.50,
   "type": "credit",
-  "origin_account_id": ":originAccountId",
-  "destination_account_id": ":destinationAccountId"
+  "origin_account_id": "2",
+  "destination_account_id": "3"
 }
 
-### Get transaction by ID
-GET http://localhost:3333/transactions/:transactionId
+### find transaction by id
+GET http://localhost:3333/transactions/2
 Content-Type: application/json
 
-### List all transactions
+### find all transactions
 GET http://localhost:3333/transactions
 Content-Type: application/json
 
-### Update transaction
-PUT http://localhost:3333/transactions/:transactionId
+### update transaction
+PUT http://localhost:3333/transactions/18
 Content-Type: application/json
 
 {
-  "amount": 200.00
+   "type": "credit",
+  "amount": 200.00,
+   "origin_account_id": 1,
+  "destination_account_id": 5,
 }
 
-### Delete transaction
+### delete transaction
 DELETE http://localhost:3333/transactions/:transactionId
 Content-Type: application/json

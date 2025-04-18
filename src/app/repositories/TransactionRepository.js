@@ -6,26 +6,30 @@ export default class TransactionRepository {
     return await Transaction.create(transactionData);
   }
 
-  async findByUser(accountIds) {
+  async findById(id) {
+    return await Transaction.findByPk(id);
+  }
+
+  async findByOriginAccountIds(accountIds) {
     return await Transaction.findAll({
       where: { origin_account_id: { [Op.in]: accountIds } },
     });
   }
 
-  async findById(id) {
-    return await Transaction.findByPk(id);
-  }
-
-  async listAll() {
+  async findAll() {
     return await Transaction.findAll();
   }
 
   async update(id, updateData) {
-    await Transaction.update(updateData, { where: { id } });
-    return await Transaction.findByPk(id);
+    const [, [updatedTransaction]] = await Transaction.update(updateData, {
+      where: { id },
+      returning: true,
+    });
+    return updatedTransaction;
   }
 
   async delete(id) {
-    await Transaction.destroy({ where: { id } });
+    const deletedRows = await Transaction.destroy({ where: { id } });
+    return deletedRows > 0;
   }
 }

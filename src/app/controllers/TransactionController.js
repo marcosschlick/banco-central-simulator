@@ -14,20 +14,49 @@ export default class TransactionController {
     }
   };
 
-  getById = async (req, res) => {
+  findById = async (req, res) => {
     try {
       const transaction = await this.transactionService.findById(
         req.params.transactionId,
       );
       res.status(200).json(transaction);
     } catch (error) {
-      res.status(404).json({ error: "Transaction not found" });
+      res
+        .status(error.message.includes("not found") ? 404 : 500)
+        .json({ error: error.message });
     }
   };
 
-  getAll = async (req, res) => {
-    const transactions = await this.transactionService.listAll();
-    res.status(200).json(transactions);
+  findAll = async (req, res) => {
+    try {
+      const transactions = await this.transactionService.findAll();
+      res.status(200).json(transactions);
+    } catch (error) {
+      res.status(500).json({ error: "Internal server error" });
+    }
+  };
+
+  update = async (req, res) => {
+    try {
+      const updatedTransaction = await this.transactionService.update(
+        req.params.transactionId,
+        req.body,
+      );
+      res.status(200).json(updatedTransaction);
+    } catch (error) {
+      const status = error.message.includes("not found") ? 404 : 400;
+      res.status(status).json({ error: error.message });
+    }
+  };
+
+  delete = async (req, res) => {
+    try {
+      await this.transactionService.delete(req.params.transactionId);
+      res.status(204).send();
+    } catch (error) {
+      const status = error.message.includes("not found") ? 404 : 500;
+      res.status(status).json({ error: error.message });
+    }
   };
 
   getUserTransactions = async (req, res) => {
@@ -65,27 +94,6 @@ export default class TransactionController {
       res.status(201).json(result);
     } catch (error) {
       res.status(400).json({ error: error.message });
-    }
-  };
-
-  update = async (req, res) => {
-    try {
-      const updatedTransaction = await this.transactionService.update(
-        req.params.transactionId,
-        req.body,
-      );
-      res.status(200).json(updatedTransaction);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
-  };
-
-  delete = async (req, res) => {
-    try {
-      await this.transactionService.delete(req.params.transactionId);
-      res.status(204).send();
-    } catch (error) {
-      res.status(404).json({ error: "Transaction not found" });
     }
   };
 }

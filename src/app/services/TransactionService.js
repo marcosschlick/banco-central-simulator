@@ -12,15 +12,32 @@ export default class TransactionService {
   }
 
   async create(transactionData) {
-    return await this.transactionRepository.create(transactionData);
+    return this.transactionRepository.create(transactionData);
   }
 
   async findById(id) {
-    return await this.transactionRepository.findById(id);
+    const transaction = await this.transactionRepository.findById(id);
+    if (!transaction) throw new Error("Transaction not found");
+    return transaction;
   }
 
-  async listAll() {
-    return await this.transactionRepository.listAll();
+  async findAll() {
+    return await this.transactionRepository.findAll();
+  }
+
+  async update(id, updateData) {
+    const updatedTransaction = await this.transactionRepository.update(
+      id,
+      updateData,
+    );
+    if (!updatedTransaction) throw new Error("Transaction not found");
+    return updatedTransaction;
+  }
+
+  async delete(id) {
+    const isDeleted = await this.transactionRepository.delete(id);
+    if (!isDeleted) throw new Error("Transaction not found");
+    return true;
   }
 
   async getUserTransactions(userId) {
@@ -36,19 +53,26 @@ export default class TransactionService {
   }
 
   async getUserTransactionsByInstitution(userId, institutionName) {
-    const { name } = await this.userRepository.getUserName(userId);
-    const { id: institutionId } =
+    const { name: userName } = await this.userRepository.getUserName(userId);
+    const { id: institutionId, name } =
       await this.institutionRepository.findByName(institutionName);
     const accounts = await this.accountRepository.findByUser(userId);
 
+    console.log(accounts);
+
+    console.log(name);
+    console.log(institutionId);
+
     const transactions = await this.transactionRepository.findByUser(
       accounts
-        .filter((a) => a.institutionId === institutionId)
+        .filter((a) => a.institution_id === institutionId)
         .map((c) => c.id),
     );
 
+    console.log(transactions);
+
     return {
-      name: name,
+      name: userName,
       transactions,
     };
   }
@@ -144,13 +168,5 @@ export default class TransactionService {
       amount: transactionData.amount,
       type: "credit",
     });
-  }
-
-  async update(id, updateData) {
-    return await this.transactionRepository.update(id, updateData);
-  }
-
-  async delete(id) {
-    await this.transactionRepository.delete(id);
   }
 }
