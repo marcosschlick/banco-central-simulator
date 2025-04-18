@@ -1,31 +1,39 @@
-### Create user
+### create user
 POST http://localhost:3333/users
 Content-Type: application/json
 
 {
   "name": "Test User",
-  "cpf": "00000000000"
+  "cpf": "55555555555"
 }
 
-### Get user by ID
-GET http://localhost:3333/users/:userId
+### find user by id
+GET http://localhost:3333/users/id/:userId
 Content-Type: application/json
 
-### List all users
+### find user by cpf
+GET http://localhost:3333/users/cpf/:userCpf
+Content-Type: application/json
+
+
+### find all users
 GET http://localhost:3333/users
 Content-Type: application/json
 
-### Update user
+### update user
 PUT http://localhost:3333/users/:userId
 Content-Type: application/json
 
 {
+  "cpf": "66666666666",
   "name": "Updated Name"
 }
 
-### Delete user
+### delete user
 DELETE http://localhost:3333/users/:userId
 Content-Type: application/json
+
+# acaba o crud 
 
 ### Create account for user
 POST http://localhost:3333/users/:userId/accounts

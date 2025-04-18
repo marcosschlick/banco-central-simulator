@@ -9,23 +9,24 @@ export default class UserRepository {
     return await User.findByPk(id);
   }
 
-  async getUserName(id) {
-    return await User.findOne({
-      where: { id },
-      attributes: ["name"],
-    });
+  async findByCpf(cpf) {
+    return await User.findOne({ where: { cpf } });
   }
 
-  async listAll() {
+  async findAll() {
     return await User.findAll();
   }
 
   async update(id, updateData) {
-    await User.update(updateData, { where: { id } });
-    return await User.findByPk(id);
+    const [, [updatedUser]] = await User.update(updateData, {
+      where: { id },
+      returning: true,
+    });
+    return updatedUser;
   }
 
   async delete(id) {
-    await User.destroy({ where: { id } });
+    const deletedRows = await User.destroy({ where: { id } });
+    return deletedRows > 0;
   }
 }

@@ -9,10 +9,11 @@ const userController = new UserController();
 const accountController = new AccountController();
 const transactionController = new TransactionController();
 
-// Base User routes
+// user routes
 router.post("", userController.create);
-router.get("/:userId", userController.getById);
-router.get("", userController.getAll);
+router.get("/id/:userId", userController.findById);
+router.get("/cpf/:userCpf", userController.findByCpf);
+router.get("", userController.findAll);
 router.put("/:userId", userController.update);
 router.delete("/:userId", userController.delete);
 
