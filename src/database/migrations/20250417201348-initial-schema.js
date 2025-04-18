@@ -3,6 +3,7 @@ import { Sequelize, DataTypes } from "sequelize";
 const commonFields = {
   id: {
     type: DataTypes.INTEGER,
+    allowNull: false,
     primaryKey: true,
     autoIncrement: true,
   },
@@ -71,11 +72,21 @@ export default {
       },
       user_id: {
         type: DataTypes.INTEGER,
-        references: { model: "users", key: "id" },
+        allowNull: false,
+        references: {
+          model: "users",
+          key: "id",
+          onDelete: "CASCADE",
+        },
       },
       institution_id: {
         type: DataTypes.INTEGER,
-        references: { model: "institutions", key: "id" },
+        allowNull: false,
+        references: {
+          model: "institutions",
+          key: "id",
+          onDelete: "CASCADE",
+        },
       },
     });
 
@@ -103,13 +114,21 @@ export default {
       },
       origin_account_id: {
         type: DataTypes.INTEGER,
-        references: { model: "accounts", key: "id" },
         allowNull: false,
+        references: {
+          model: "accounts",
+          key: "id",
+          onDelete: "CASCADE",
+        },
       },
       destination_account_id: {
         type: DataTypes.INTEGER,
-        references: { model: "accounts", key: "id" },
         allowNull: true,
+        references: {
+          model: "accounts",
+          key: "id",
+          onDelete: "SET NULL",
+        },
       },
     });
   },
