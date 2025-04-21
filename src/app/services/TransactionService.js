@@ -65,8 +65,6 @@ export default class TransactionService {
           .map((c) => c.id),
       );
 
-    console.log(transactions);
-
     return {
       user: userName,
       institution: institutionName,
