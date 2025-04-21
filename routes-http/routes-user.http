@@ -35,10 +35,9 @@ Content-Type: application/json
 
 # acaba o crud 
 
-### Create account for user
+### create account by user id
 POST http://localhost:3333/users/:userId/accounts
 Content-Type: application/json
-
 {
   "institution_id": ":institutionId",
   "balance": 2,
@@ -46,27 +45,27 @@ Content-Type: application/json
   "credit_available": "500.00"
 }
 
-### Get user balances
+### find balances by user id
 GET http://localhost:3333/users/:userId/balances
 Content-Type: application/json
 
-### Get total balance
+### find total balance by user id
 GET http://localhost:3333/users/:userId/balance/total
 Content-Type: application/json
 
-### Get balance by institution
+### find balance by institution
 GET http://localhost:3333/users/:userId/balance?institution=bras
 Content-Type: application/json
 
-### Get user transactions
+### find transactions by user id
 GET http://localhost:3333/users/:userId/transactions
 Content-Type: application/json
 
-### Get transactions by institution
+### find transactions by institution
 GET http://localhost:3333/users/:userId/transaction?institution=bras
 Content-Type: application/json
 
-### Debit transaction
+### debit transaction
 POST http://localhost:3333/users/:userId/transactions?institution=bras
 Content-Type: application/json
 
@@ -76,7 +75,7 @@ Content-Type: application/json
   "destination_account_id": ":accountId"
 }
 
-### Credit transaction
+### credit transaction
 POST http://localhost:3333/users/:userId/transactions?institution=bras
 Content-Type: application/json
 

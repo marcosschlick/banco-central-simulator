@@ -39,21 +39,9 @@ export default class AccountService {
     return true;
   }
 
-  async getUserTransactions(userId) {
+  async findBalances(userId) {
     const user = await this.userRepository.findById(userId);
-    const accounts = await this.accountRepository.findByUser(userId);
-
-    return {
-      user: user.name,
-      transactions: await this.transactionRepository.findByUser(
-        accounts.map((a) => a.id),
-      ),
-    };
-  }
-
-  async getBalances(userId) {
-    const user = await this.userRepository.findById(userId);
-    const balances = await this.accountRepository.getBalance(userId);
+    const balances = await this.accountRepository.findBalanceByUserId(userId);
 
     return Promise.all(
       balances.map(async (item) => {
@@ -71,9 +59,9 @@ export default class AccountService {
     );
   }
 
-  async getTotalBalance(userId) {
+  async findTotalBalanceByUserId(userId) {
     const user = await this.userRepository.findById(userId);
-    const accounts = await this.accountRepository.getBalance(userId);
+    const accounts = await this.accountRepository.findBalanceByUserId(userId);
 
     const totals = accounts.reduce(
       (acc, account) => ({
@@ -92,12 +80,12 @@ export default class AccountService {
     };
   }
 
-  async getBalanceByInstitution(userId, institutionName) {
+  async findBalanceByInstitution(userId, institutionName) {
     const user = await this.userRepository.findById(userId);
     const { id: institutionId, name } =
       await this.institutionRepository.findByName(institutionName);
 
-    const balance = await this.accountRepository.getBalanceByInstitution(
+    const balance = await this.accountRepository.findBalanceByInstitutionId(
       userId,
       institutionId,
     );
@@ -108,6 +96,18 @@ export default class AccountService {
       balance: balance.balance,
       creditLimit: balance.credit_limit,
       creditAvailable: balance.credit_available,
+    };
+  }
+
+  async findUserTransactions(userId) {
+    const user = await this.userRepository.findById(userId);
+    const accounts = await this.accountRepository.findByUser(userId);
+
+    return {
+      user: user.name,
+      transactions: await this.transactionRepository.findByUser(
+        accounts.map((a) => a.id),
+      ),
     };
   }
 }

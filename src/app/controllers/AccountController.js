@@ -14,7 +14,7 @@ export default class AccountController {
     }
   };
 
-  createById = async (req, res) => {
+  createByUserId = async (req, res) => {
     try {
       const account = await this.accountService.create({
         ...req.body,
@@ -82,18 +82,20 @@ export default class AccountController {
     }
   };
 
-  getBalances = async (req, res) => {
+  findBalances = async (req, res) => {
     try {
-      const balances = await this.accountService.getBalances(req.params.userId);
+      const balances = await this.accountService.findBalances(
+        req.params.userId,
+      );
       res.status(200).json(balances);
     } catch (error) {
       res.status(404).json({ error: "User not found" });
     }
   };
 
-  getTotalBalance = async (req, res) => {
+  findTotalBalanceByUserId = async (req, res) => {
     try {
-      const total = await this.accountService.getTotalBalance(
+      const total = await this.accountService.findTotalBalanceByUserId(
         req.params.userId,
       );
       res.status(200).json(total);
@@ -102,9 +104,9 @@ export default class AccountController {
     }
   };
 
-  getBalanceByInstitution = async (req, res) => {
+  findBalanceByInstitution = async (req, res) => {
     try {
-      const balance = await this.accountService.getBalanceByInstitution(
+      const balance = await this.accountService.findBalanceByInstitution(
         req.params.userId,
         req.query.institution,
       );

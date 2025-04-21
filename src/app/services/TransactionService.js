@@ -40,39 +40,36 @@ export default class TransactionService {
     return true;
   }
 
-  async getUserTransactions(userId) {
+  async findByUserId(userId) {
     const user = await this.userRepository.findById(userId);
-    const accounts = await this.accountRepository.findByUser(userId);
+    const accounts = await this.accountRepository.findByUserId(userId);
 
     return {
       user: user.name,
-      transactions: await this.transactionRepository.findByUser(
+      transactions: await this.transactionRepository.findByOriginAccountIds(
         accounts.map((a) => a.id),
       ),
     };
   }
 
-  async getUserTransactionsByInstitution(userId, institutionName) {
-    const { name: userName } = await this.userRepository.getUserName(userId);
-    const { id: institutionId, name } =
-      await this.institutionRepository.findByName(institutionName);
-    const accounts = await this.accountRepository.findByUser(userId);
+  async findByInstitution(userId, institution) {
+    const { name: userName } = await this.userRepository.findById(userId);
+    const { id: institutionId, name: institutionName } =
+      await this.institutionRepository.findByName(institution);
+    const accounts = await this.accountRepository.findByUserId(userId);
 
-    console.log(accounts);
-
-    console.log(name);
-    console.log(institutionId);
-
-    const transactions = await this.transactionRepository.findByUser(
-      accounts
-        .filter((a) => a.institution_id === institutionId)
-        .map((c) => c.id),
-    );
+    const transactions =
+      await this.transactionRepository.findByOriginAccountIds(
+        accounts
+          .filter((a) => a.institution_id === institutionId)
+          .map((c) => c.id),
+      );
 
     console.log(transactions);
 
     return {
-      name: userName,
+      user: userName,
+      institution: institutionName,
       transactions,
     };
   }
@@ -111,7 +108,7 @@ export default class TransactionService {
       await this.institutionRepository.findByName(institutionName);
     if (!institution) throw new Error("Institution not found");
 
-    const accounts = await this.accountRepository.findByUser(userId);
+    const accounts = await this.accountRepository.findByUserId(userId);
     const account = accounts.find((a) => a.institution_id === institution.id);
     if (!account) throw new Error("Account not found in specified institution");
 
@@ -145,7 +142,7 @@ export default class TransactionService {
       await this.institutionRepository.findByName(institutionName);
     if (!institution) throw new Error("Institution not found");
 
-    const accounts = await this.accountRepository.findByUser(userId);
+    const accounts = await this.accountRepository.findByUserId(userId);
     const account = accounts.find((a) => a.institution_id === institution.id);
     if (!account) throw new Error("Account not found in specified institution");
 

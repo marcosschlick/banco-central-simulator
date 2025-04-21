@@ -17,20 +17,20 @@ router.get("", userController.findAll);
 router.put("/:userId", userController.update);
 router.delete("/:userId", userController.delete);
 
-// Nested account routes
-router.post("/:userId/accounts", accountController.createById);
-router.get("/:userId/balance/total", accountController.getTotalBalance);
-router.get("/:userId/balance", accountController.getBalanceByInstitution);
-router.get("/:userId/balances", accountController.getBalances);
-
-// Nested transaction routes
-router.get("/:userId/transactions", transactionController.getUserTransactions);
+// account routes
+router.post("/:userId/accounts", accountController.createByUserId);
+router.get("/:userId/balances", accountController.findBalances);
 router.get(
-  "/:userId/transaction",
-  transactionController.getUserTransactionsByInstitution,
+  "/:userId/balance/total",
+  accountController.findTotalBalanceByUserId,
 );
+router.get("/:userId/balance", accountController.findBalanceByInstitution);
+
+// transaction routes
+router.get("/:userId/transactions", transactionController.findByUserId);
+router.get("/:userId/transaction", transactionController.findByInstitution);
 router.post(
-  "/:userId/transactions/process",
+  "/:userId/transactions",
   transactionController.processTransactionByInstitution,
 );
 

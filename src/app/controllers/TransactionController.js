@@ -59,9 +59,9 @@ export default class TransactionController {
     }
   };
 
-  getUserTransactions = async (req, res) => {
+  findByUserId = async (req, res) => {
     try {
-      const transactions = await this.transactionService.getUserTransactions(
+      const transactions = await this.transactionService.findByUserId(
         req.params.userId,
       );
       res.status(200).json(transactions);
@@ -70,13 +70,12 @@ export default class TransactionController {
     }
   };
 
-  getUserTransactionsByInstitution = async (req, res) => {
+  findByInstitution = async (req, res) => {
     try {
-      const transactions =
-        await this.transactionService.getUserTransactionsByInstitution(
-          req.params.userId,
-          req.query.institution,
-        );
+      const transactions = await this.transactionService.findByInstitution(
+        req.params.userId,
+        req.query.institution,
+      );
       res.status(200).json(transactions);
     } catch (error) {
       res.status(404).json({ error: "No transactions found" });

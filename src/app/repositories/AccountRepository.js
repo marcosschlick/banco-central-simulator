@@ -32,13 +32,13 @@ export default class AccountRepository {
     return deletedRows > 0;
   }
 
-  async getBalance(userId) {
+  async findBalanceByUserId(userId) {
     return await Account.findAll({
       where: { user_id: userId },
     });
   }
 
-  async getBalanceByInstitution(userId, institutionId) {
+  async findBalanceByInstitutionId(userId, institutionId) {
     return await Account.findOne({
       where: { user_id: userId, institution_id: institutionId },
     });
