@@ -56,19 +56,23 @@ npm run dev
 ## Estrutura de Diretórios
 
 ```
-├── .sequelizerc        # Configurações do Sequelize
-├── compose.yml         # Configurações do banco PostgreSQL
-├── routes-http/        # Arquivos para testar endpoints HTTP
-├── src/
-│   ├── config/         # Configurações do projeto
-│   ├── controllers/    # Lógica dos endpoints
-│   ├── database/       # Migrações e seeders
-│   ├── models/         # Definições dos modelos
-│   ├── repositories/   # Camada de acesso a dados
-│   ├── routes/         # Definições das rotas
-│   └── services/       # Lógica de negócio
+├── compose.yml          # Configuração do container PostgreSQL
+├── routes-http/         # Coleção de requisições HTTP para teste
+└── src/
+    ├── app/             # Lógica principal da aplicação
+    │   ├── controllers/ # Controladores dos endpoints
+    │   ├── models/      # Modelos de dados do Sequelize
+    │   ├── repositories/# Camada de acesso ao banco de dados
+    │   └── services/    # Lógica de negócio e regras
+    ├── config/          # Configurações do projeto
+    │   └── database.cjs # Configuração da conexão com o banco
+    ├── database/        # Migrações e seeders
+    │   ├── migrations/  # Scripts de migração do banco
+    │   └── seeders/     # Dados iniciais para desenvolvimento
+    ├── routes/          # Definição das rotas da API
+    ├── app.js           # Configuração do Express e middlewares
+    └── server.js        # Ponto de entrada da aplicação
 ```
-
 
 ## Licença
 
