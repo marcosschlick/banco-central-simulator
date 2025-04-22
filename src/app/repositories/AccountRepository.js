@@ -15,6 +15,20 @@ export default class AccountRepository {
     });
   }
 
+  async findByUserIdOrderedByBalanceDesc(userId) {
+    return await Account.findAll({
+      where: { user_id: userId },
+      order: [["balance", "DESC"]],
+    });
+  }
+
+  async findByUserIdOrderedByCreditAvailableDesc(userId) {
+    return await Account.findAll({
+      where: { user_id: userId },
+      order: [["credit_available", "DESC"]],
+    });
+  }
+
   async findAll() {
     return await Account.findAll();
   }
@@ -57,7 +71,7 @@ export default class AccountRepository {
     const account = await this.findById(accountId);
     if (!account) throw new Error("Account not found");
 
-    const newCredit = Number(account.credit_available) - Number(amount);
+    const newCredit = Number(account.credit_available) + Number(amount);
     await Account.update(
       { credit_available: newCredit },
       { where: { id: accountId } },

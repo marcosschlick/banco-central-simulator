@@ -82,6 +82,18 @@ export default class TransactionController {
     }
   };
 
+  processTransaction = async (req, res) => {
+    try {
+      const result = await this.transactionService.processTransaction(
+        req.params.userId,
+        req.body,
+      );
+      res.status(201).json(result);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+
   processTransactionByInstitution = async (req, res) => {
     try {
       const result =

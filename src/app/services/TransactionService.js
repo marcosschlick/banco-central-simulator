@@ -72,6 +72,119 @@ export default class TransactionService {
     };
   }
 
+  async processTransaction(userId, transactionData) {
+    const { type } = transactionData;
+
+    switch (type.toLowerCase()) {
+      case "debit":
+        return this.processDebitTransaction(userId, transactionData);
+      case "credit":
+        return this.processCreditTransaction(userId, transactionData);
+      default:
+        throw new Error(`Invalid transaction type: ${type}`);
+    }
+  }
+
+  async processDebitTransaction(userId, transactionData) {
+    let remainingAmount = transactionData.amount;
+    const transactions = [];
+    const accounts =
+      await this.accountRepository.findByUserIdOrderedByBalanceDesc(userId);
+
+    if (!accounts?.length) throw new Error("Account not found");
+
+    const balanceTotal = accounts.reduce(
+      (total, account) => total + Number(account.balance),
+      0,
+    );
+
+    if (balanceTotal < remainingAmount) {
+      throw new Error("Insufficient balance");
+    }
+
+    for (const account of accounts) {
+      if (remainingAmount <= 0) break;
+
+      const accountBalance = Number(account.balance);
+      const deduction = Math.min(accountBalance, remainingAmount);
+
+      account.balance = accountBalance - deduction;
+
+      await this.accountRepository.updateBalance(account.id, -deduction);
+
+      const transaction = await this.transactionRepository.create({
+        origin_account_id: account.id,
+        destination_account_id: transactionData.destination_account_id,
+        amount: deduction,
+        type: "debit",
+      });
+
+      transactions.push(transaction);
+      remainingAmount -= deduction;
+    }
+
+    await this.accountRepository.updateBalance(
+      transactionData.destination_account_id,
+      transactionData.amount,
+    );
+
+    return {
+      balanceTotal,
+      accounts,
+      transactions,
+    };
+  }
+
+  async processCreditTransaction(userId, transactionData) {
+    let remainingAmount = transactionData.amount;
+    const transactions = [];
+    const accounts =
+      await this.accountRepository.findByUserIdOrderedByCreditAvailableDesc(
+        userId,
+      );
+
+    if (!accounts?.length) throw new Error("Account not found");
+
+    const creditTotal = accounts.reduce(
+      (total, account) => total + Number(account.credit_available),
+      0,
+    );
+
+    if (creditTotal < remainingAmount) throw new Error("Insufficient credit");
+
+    for (const account of accounts) {
+      if (remainingAmount <= 0) break;
+
+      const accountCredit = Number(account.credit_available);
+      const deduction = Math.min(accountCredit, remainingAmount);
+
+      account.credit_available = accountCredit - deduction;
+
+      await this.accountRepository.updateCredit(account.id, -deduction);
+
+      const transaction = await this.transactionRepository.create({
+        origin_account_id: account.id,
+        destination_account_id: transactionData.destination_account_id,
+        amount: deduction,
+        type: "debit",
+      });
+
+      transactions.push(transaction);
+      remainingAmount -= deduction;
+    }
+
+    await this.accountRepository.updateBalance(
+      transactionData.destination_account_id,
+      transactionData.amount,
+    );
+
+    return {
+      creditTotal,
+      accounts,
+      transactions,
+    };
+  }
+
   async processTransactionByInstitution(
     userId,
     transactionData,
@@ -150,7 +263,7 @@ export default class TransactionService {
 
     await this.accountRepository.updateCredit(
       account.id,
-      transactionData.amount,
+      -transactionData.amount,
     );
     await this.accountRepository.updateBalance(
       transactionData.destination_account_id,

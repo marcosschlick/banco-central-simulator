@@ -29,8 +29,9 @@ router.get("/:userId/balance", accountController.findBalanceByInstitution);
 // transaction routes
 router.get("/:userId/transactions", transactionController.findByUserId);
 router.get("/:userId/transaction", transactionController.findByInstitution);
+router.post("/:userId/transaction", transactionController.processTransaction);
 router.post(
-  "/:userId/transactions",
+  "/:userId/transaction/institution",
   transactionController.processTransactionByInstitution,
 );
 

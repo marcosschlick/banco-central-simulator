@@ -66,7 +66,7 @@ GET http://localhost:3333/users/:userId/transaction?institution=bras
 Content-Type: application/json
 
 ### debit transaction
-POST http://localhost:3333/users/:userId/transactions?institution=bras
+POST http://localhost:3333/users/:userId/transaction
 Content-Type: application/json
 
 {
@@ -76,7 +76,27 @@ Content-Type: application/json
 }
 
 ### credit transaction
-POST http://localhost:3333/users/:userId/transactions?institution=bras
+POST http://localhost:3333/users/:userId/transaction
+Content-Type: application/json
+
+{
+  "amount": 28,
+  "type": "credit",
+  "destination_account_id": ":accountId"
+}
+
+### debit transaction by institution
+POST http://localhost:3333/users/:userId/transaction/institution?institution=bras
+Content-Type: application/json
+
+{
+  "amount": 62,
+  "type": "debit",
+  "destination_account_id": ":accountId"
+}
+
+### credit transaction by institution
+POST http://localhost:3333/users/:userId/transaction/institution?institution=bras
 Content-Type: application/json
 
 {
