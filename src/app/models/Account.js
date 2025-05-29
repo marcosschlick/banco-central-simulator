@@ -10,22 +10,14 @@ class Account extends Model {
           autoIncrement: true,
         },
         balance: {
-          type: Sequelize.DECIMAL(15, 2),
+          type: Sequelize.DECIMAL,
           defaultValue: 0,
           allowNull: false,
-          validate: { min: 0 },
         },
-        credit_limit: {
-          type: Sequelize.DECIMAL(15, 2),
-          defaultValue: 0,
+        account_number: {
+          type: Sequelize.STRING,
           allowNull: false,
-          validate: { min: 0 },
-        },
-        credit_available: {
-          type: Sequelize.DECIMAL(15, 2),
-          defaultValue: 0,
-          allowNull: false,
-          validate: { min: 0 },
+          unique: true,
         },
       },
       {
@@ -45,19 +37,14 @@ class Account extends Model {
       as: "user",
     });
 
-    this.belongsTo(models.Institution, {
-      foreignKey: "institution_id",
-      as: "institution",
+    this.belongsTo(models.Bank, {
+      foreignKey: "bank_id",
+      as: "bank",
     });
 
     this.hasMany(models.Transaction, {
-      foreignKey: "origin_account_id",
-      as: "outgoing_transactions",
-    });
-
-    this.hasMany(models.Transaction, {
-      foreignKey: "destination_account_id",
-      as: "incoming_transactions",
+      foreignKey: "account_id",
+      as: "transactions",
     });
   }
 }

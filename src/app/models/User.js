@@ -10,13 +10,22 @@ class User extends Model {
           autoIncrement: true,
         },
         cpf: {
-          type: Sequelize.STRING(11),
+          type: Sequelize.STRING,
           allowNull: false,
           unique: true,
           validate: { len: [11, 11] },
         },
         name: {
-          type: Sequelize.STRING(100),
+          type: Sequelize.STRING,
+          allowNull: false,
+        },
+        email: {
+          type: Sequelize.STRING,
+          unique: true,
+          allowNull: false,
+        },
+        birth_date: {
+          type: Sequelize.DATE,
           allowNull: false,
         },
       },
