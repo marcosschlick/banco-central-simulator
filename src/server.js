@@ -1,6 +1,6 @@
 import app from "./app.js";
 import "dotenv/config";
-import "./app/models/index.js";
+import "./database/index.js";
 
 const PORT = process.env.SV_PORT || 3333;
 

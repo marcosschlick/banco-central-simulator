@@ -1,4 +1,4 @@
-import "../../app/models/index.js";
+import "../../database/index.js";
 import seedAccounts from "./initialAccount.js";
 import seedInstitutions from "./initialInstitution.js";
 import seedUsers from "./initialUser.js";

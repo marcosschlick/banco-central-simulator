@@ -1,10 +1,10 @@
 import Sequelize from "sequelize";
-import databaseConfig from "../../config/database.cjs";
+import databaseConfig from "../config/database.cjs";
 
-import Account from "./Account.js";
-import Institution from "./Institution.js";
-import Transaction from "./Transaction.js";
-import User from "./User.js";
+import Account from "../app/models/Account.js";
+import Institution from "../app/models/Institution.js";
+import Transaction from "../app/models/Transaction.js";
+import User from "../app/models/User.js";
 
 const models = [Account, Institution, Transaction, User];
 
