@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node --watch src/server.js",
     "migrate": "npx sequelize-cli db:migrate",
-    "seed": "node src/database/seeders/index.js"
+    "seed": "npx sequelize-cli db:seed:all"
   },
   "repository": {
     "type": "git",
