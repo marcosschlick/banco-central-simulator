@@ -1,6 +1,6 @@
 import { Sequelize, Model } from "sequelize";
 
-class OpenFinanceAuthorization extends Model {
+export default class OpenFinance extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -55,8 +55,8 @@ class OpenFinanceAuthorization extends Model {
       },
       {
         sequelize,
-        modelName: "OpenFinanceAuthorization",
-        tableName: "open_finance_authorizations",
+        modelName: "OpenFinance",
+        tableName: "open_finance",
         timestamps: true,
         hooks: {
           beforeSave: async (authorization) => {
@@ -91,5 +91,3 @@ class OpenFinanceAuthorization extends Model {
     return this;
   }
 }
-
-export default OpenFinanceAuthorization;
