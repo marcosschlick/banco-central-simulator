@@ -1,6 +1,6 @@
 import { Sequelize, Model } from "sequelize";
 
-class Account extends Model {
+export default class Account extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -27,8 +27,7 @@ class Account extends Model {
         timestamps: true,
         hooks: {
           afterCreate: async (account, options) => {
-            const OpenFinanceAuthorization =
-              sequelize.models.OpenFinanceAuthorization;
+            const OpenFinanceAuthorization = sequelize.models.OpenFinance;
 
             await OpenFinanceAuthorization.create({
               status: false,
@@ -60,5 +59,3 @@ class Account extends Model {
     });
   }
 }
-
-export default Account;
