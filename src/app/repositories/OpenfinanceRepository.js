@@ -1,4 +1,4 @@
-import { OpenFinanceAuthorization as OpenFinance } from "../models/OpenFinanceAuthorization.js";
+import OpenFinance from "../models/OpenFinance.js";
 
 export default class OpenFinanceRepository {
   async create(openFinanceData) {
