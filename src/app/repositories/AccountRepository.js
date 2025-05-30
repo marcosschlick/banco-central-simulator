@@ -19,6 +19,15 @@ export default class AccountRepository {
     });
   }
 
+  async findByUserAndBank(userId, bankId) {
+    return await Account.findOne({
+      where: {
+        user_id: userId,
+        bank_id: bankId,
+      },
+    });
+  }
+
   async findByAccountNumber(accountNumber) {
     return await Account.findOne({
       where: { account_number: accountNumber },
