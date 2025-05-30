@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "migrate": "npx sequelize-cli db:migrate",
     "seed": "npx sequelize-cli db:seed:all"
@@ -25,10 +26,9 @@
     "pg": "^8.14.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.7",
-    "uuid": "^11.1.0"
+    "sequelize-cli": "^6.6.2"
   },
   "devDependencies": {
-    "prettier": "^3.5.3",
-    "sequelize-cli": "^6.6.2"
+    "prettier": "^3.5.3"
   }
 }
