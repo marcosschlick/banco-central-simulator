@@ -17,6 +17,10 @@ export default class UserRepository {
     return await User.findOne({ where: { cpf } });
   }
 
+  async findByEmail(email) {
+    return await User.findOne({ where: { email } });
+  }
+
   async findByName(searchName) {
     const normalizedName = searchName
       .normalize("NFD")
