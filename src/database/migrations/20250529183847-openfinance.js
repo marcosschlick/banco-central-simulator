@@ -95,7 +95,13 @@ export default {
       },
     });
 
-    await queryInterface.createTable("open_finance_authorizations", {
+    await queryInterface.addConstraint("accounts", {
+      fields: ["user_id", "bank_id"],
+      type: "unique",
+      name: "unique_user_bank_account",
+    });
+
+    await queryInterface.createTable("open_finance", {
       ...commonFields,
       status: {
         type: DataTypes.BOOLEAN,
@@ -140,7 +146,7 @@ export default {
 
   async down(queryInterface) {
     await queryInterface.dropTable("transactions");
-    await queryInterface.dropTable("open_finance_authorizations");
+    await queryInterface.dropTable("open_finance");
     await queryInterface.dropTable("accounts");
     await queryInterface.dropTable("banks");
     await queryInterface.dropTable("users");
