@@ -9,12 +9,27 @@ export default class UserRepository {
     return await User.findByPk(id);
   }
 
+  async findAll() {
+    return await User.findAll();
+  }
+
   async findByCpf(cpf) {
     return await User.findOne({ where: { cpf } });
   }
 
-  async findAll() {
-    return await User.findAll();
+  async findByName(searchName) {
+    const normalizedName = searchName
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+
+    return await User.findAll({
+      where: {
+        name: {
+          [Op.iLike]: `%${normalizedName}%`,
+        },
+      },
+    });
   }
 
   async update(id, updateData) {

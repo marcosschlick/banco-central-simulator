@@ -10,14 +10,14 @@ export default class TransactionRepository {
     return await Transaction.findByPk(id);
   }
 
-  async findByOriginAccountIds(accountIds) {
-    return await Transaction.findAll({
-      where: { origin_account_id: { [Op.in]: accountIds } },
-    });
-  }
-
   async findAll() {
     return await Transaction.findAll();
+  }
+
+  async findByAccount(accountId) {
+    return await Transaction.findAll({
+      where: { account_id: { [Op.in]: accountId } },
+    });
   }
 
   async update(id, updateData) {

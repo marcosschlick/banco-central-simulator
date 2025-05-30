@@ -9,28 +9,20 @@ export default class AccountRepository {
     return await Account.findByPk(id);
   }
 
-  async findByUserId(userId) {
-    return await Account.findAll({
-      where: { user_id: userId },
-    });
-  }
-
-  async findByUserIdOrderedByBalanceDesc(userId) {
-    return await Account.findAll({
-      where: { user_id: userId },
-      order: [["balance", "DESC"]],
-    });
-  }
-
-  async findByUserIdOrderedByCreditAvailableDesc(userId) {
-    return await Account.findAll({
-      where: { user_id: userId },
-      order: [["credit_available", "DESC"]],
-    });
-  }
-
   async findAll() {
     return await Account.findAll();
+  }
+
+  async findByUser(userId) {
+    return await Account.findAll({
+      where: { user_id: userId },
+    });
+  }
+
+  async findByAccountNumber(accountNumber) {
+    return await Account.findOne({
+      where: { account_number: accountNumber },
+    });
   }
 
   async update(id, updateData) {
@@ -44,38 +36,5 @@ export default class AccountRepository {
   async delete(id) {
     const deletedRows = await Account.destroy({ where: { id } });
     return deletedRows > 0;
-  }
-
-  async findBalanceByUserId(userId) {
-    return await Account.findAll({
-      where: { user_id: userId },
-    });
-  }
-
-  async findBalanceByInstitutionId(userId, institutionId) {
-    return await Account.findOne({
-      where: { user_id: userId, institution_id: institutionId },
-    });
-  }
-
-  async updateBalance(accountId, amount) {
-    const account = await this.findById(accountId);
-    if (!account) throw new Error("Account not found");
-
-    const newBalance = Number(account.balance) + Number(amount);
-    await Account.update({ balance: newBalance }, { where: { id: accountId } });
-    return this.findById(accountId);
-  }
-
-  async updateCredit(accountId, amount) {
-    const account = await this.findById(accountId);
-    if (!account) throw new Error("Account not found");
-
-    const newCredit = Number(account.credit_available) + Number(amount);
-    await Account.update(
-      { credit_available: newCredit },
-      { where: { id: accountId } },
-    );
-    return this.findById(accountId);
   }
 }
