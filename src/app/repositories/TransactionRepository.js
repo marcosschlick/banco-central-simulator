@@ -1,9 +1,12 @@
 import Transaction from "../models/Transaction.js";
-import { Op } from "sequelize";
 
 export default class TransactionRepository {
   async create(transactionData) {
-    return await Transaction.create(transactionData);
+    try {
+      return await Transaction.create(transactionData);
+    } catch (error) {
+      throw new Error(`Failed to create transaction: ${error.message}`);
+    }
   }
 
   async findById(id) {
@@ -16,7 +19,7 @@ export default class TransactionRepository {
 
   async findByAccount(accountId) {
     return await Transaction.findAll({
-      where: { account_id: { [Op.in]: accountId } },
+      where: { account_id: accountId },
     });
   }
 

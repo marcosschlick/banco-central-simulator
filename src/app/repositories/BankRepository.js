@@ -3,7 +3,11 @@ import { Op } from "sequelize";
 
 export default class BankRepository {
   async create(bankData) {
-    return await Bank.create(bankData);
+    try {
+      return await Bank.create(bankData);
+    } catch (error) {
+      throw new Error(`Failed to create bank: ${error.message}`);
+    }
   }
 
   async findById(id) {
@@ -24,12 +28,8 @@ export default class BankRepository {
       .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase();
 
-    return await Bank.findOne({
-      where: {
-        name: {
-          [Op.iLike]: `%${normalizedName}%`,
-        },
-      },
+    return await Bank.findAll({
+      where: { name: { [Op.iLike]: `%${normalizedName}%` } },
     });
   }
 

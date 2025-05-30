@@ -1,8 +1,13 @@
 import User from "../models/User.js";
+import { Op } from "sequelize";
 
 export default class UserRepository {
   async create(userData) {
-    return await User.create(userData);
+    try {
+      return await User.create(userData);
+    } catch (error) {
+      throw new Error(`Failed to create user: ${error.message}`);
+    }
   }
 
   async findById(id) {

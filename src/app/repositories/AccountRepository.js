@@ -2,7 +2,11 @@ import Account from "../models/Account.js";
 
 export default class AccountRepository {
   async create(accountData) {
-    return await Account.create(accountData);
+    try {
+      return await Account.create(accountData);
+    } catch (error) {
+      throw new Error(`Failed to create account: ${error.message}`);
+    }
   }
 
   async findById(id) {
