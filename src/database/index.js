@@ -4,10 +4,10 @@ import databaseConfig from "../config/database.cjs";
 import User from "../app/models/User.js";
 import Bank from "../app/models/Bank.js";
 import Account from "../app/models/Account.js";
-import OpenFinanceAuthorization from "../app/models/OpenFinanceAuthorization.js";
+import OpenFinance from "../app/models/OpenFinance.js";
 import Transaction from "../app/models/Transaction.js";
 
-const models = [User, Bank, Account, OpenFinanceAuthorization, Transaction];
+const models = [User, Bank, Account, OpenFinance, Transaction];
 
 class Database {
   constructor() {
