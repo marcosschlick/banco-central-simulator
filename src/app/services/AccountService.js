@@ -35,6 +35,10 @@ export default class AccountService {
     return await this.accountRepository.findByUser(userId);
   }
 
+  async findByAccountNumber(accountNumber) {
+    return await this.accountRepository.findByAccountNumber(accountNumber);
+  }
+
   async update(id, updateData) {
     if (updateData.userId || updateData.bankId) {
       const account = await this.accountRepository.findById(id);

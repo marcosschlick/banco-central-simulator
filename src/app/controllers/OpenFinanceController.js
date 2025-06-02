@@ -1,110 +1,176 @@
-import OpenfinanceService from "../services/OpenfinanceService.js";
+// controllers/OpenFinanceController.js
+import UserService from "../services/UserService.js";
 import AccountService from "../services/AccountService.js";
+import OpenFinanceService from "../services/OpenfinanceService.js";
+import BankService from "../services/BankService.js";
+import TransactionService from "../services/TransactionService.js";
 
 export default class OpenFinanceController {
   constructor() {
-    this.openfinanceService = new OpenfinanceService();
+    this.userService = new UserService();
     this.accountService = new AccountService();
+    this.openFinanceService = new OpenFinanceService();
+    this.bankService = new BankService();
+    this.transactionService = new TransactionService();
   }
 
   createAuthorization = async (req, res) => {
     try {
       const { cpf, expirationDate, authorization } = req.body;
-      const account = await this.accountService.findByCpf(cpf);
 
-      await this.openFinanceService.create({
-        account_id: account.id,
+      const user = await this.userService.findByCpf(cpf);
+
+      const accounts = await this.accountService.findByUser(user.id);
+      if (!accounts.length) throw new Error("User has no accounts");
+
+      const account = accounts[0];
+      const bank = await this.bankService.findById(account.bank_id);
+
+      const openFinanceData = {
         status: authorization,
-        expiration_date: expirationDate,
-      });
+        expiration_date: expirationDate || null,
+        account_id: account.id,
+      };
+
+      const authRecord = await this.openFinanceService.create(openFinanceData);
 
       res.status(201).json({
         success: true,
         message: "Compartilhamento feito com sucesso",
         data: {
           account: {
-            institutionName: "Banco do Brasil",
+            institutionName: bank.name,
             account: account.account_number,
-            agency: account.bank.agency_code,
+            agency: bank.agency_code,
           },
         },
       });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(400).json({
+        success: false,
+        error: error.message,
+      });
     }
   };
 
   updateAuthorization = async (req, res) => {
     try {
       const { action } = req.params;
-      const { cpf, expirationDate, expiration, authorization } = req.body;
-      const account = await this.accountService.findByCpf(cpf);
+      const { cpf, expirationDate, authorization } = req.body;
 
-      const updated = await this.openFinanceService.update(account.id, {
+      const user = await this.userService.findByCpf(cpf);
+
+      const accounts = await this.accountService.findByUser(user.id);
+      if (!accounts.length) throw new Error("User has no accounts");
+
+      const account = accounts[0];
+      const bank = await this.bankService.findById(account.bank_id);
+
+      const authRecords = await this.openFinanceService.findAll();
+      const authRecord = authRecords.find((a) => a.account_id === account.id);
+
+      if (!authRecord) throw new Error("Authorization not found");
+
+      const updateData = {
         status: authorization,
-        expiration_date: expiration ? expirationDate : null,
-      });
-
-      const response = {
-        success: true,
-        message:
-          action === "revoke"
-            ? "Autorização Revogada com Sucesso"
-            : "Autorização Atualizada com Sucesso",
+        expiration_date: expirationDate || null,
       };
 
-      if (action !== "revoke") {
-        response.data = {
-          account: {
-            institutionName: "Banco do Brasil",
-            account: account.account_number,
-            agency: account.bank.agency_code,
-          },
-        };
+      await this.openFinanceService.update(authRecord.id, updateData);
+
+      if (authorization === false) {
+        return res.json({
+          success: true,
+          message: "Autorização Revogada com Sucesso",
+        });
       }
 
-      res.status(200).json(response);
+      res.json({
+        success: true,
+        message: "Autorização Atualizada com Sucesso",
+        data: {
+          account: {
+            institutionName: bank.name,
+            account: account.account_number,
+            agency: bank.agency_code,
+          },
+        },
+      });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(400).json({
+        success: false,
+        error: error.message,
+      });
     }
   };
 
   getBalance = async (req, res) => {
     try {
       const { account, agency } = req.query;
-      const accountData =
-        await this.accountService.findByAccountNumber(account);
+      if (!account || !agency) {
+        throw new Error("Account and agency parameters are required");
+      }
 
-      res.status(200).json({
+      const acc = await this.accountService.findByAccountNumber(account);
+      const bank = await this.bankService.findById(acc.bank_id);
+      if (bank.agency_code !== agency) {
+        throw new Error("Agency does not match bank records");
+      }
+
+      res.json({
         success: true,
         data: {
-          balance: accountData.balance,
+          balance: acc.balance,
         },
       });
     } catch (error) {
-      res.status(404).json({ error: error.message });
+      res.status(400).json({
+        success: false,
+        error: error.message,
+      });
     }
   };
 
   createTransaction = async (req, res) => {
     try {
       const { account, agency, amount } = req.body;
-      const accountData =
-        await this.accountService.findByAccountNumber(account);
+      const acc = await this.accountService.findByAccountNumber(account);
+      const bank = await this.bankService.findById(acc.bank_id);
+      if (bank.agency_code !== agency) {
+        throw new Error("Agency does not match bank records");
+      }
 
-      const updatedAccount = await this.accountService.update(accountData.id, {
-        balance: accountData.balance - amount,
+      const authRecords = await this.openFinanceService.findAll();
+      const authRecord = authRecords.find((a) => a.account_id === acc.id);
+
+      if (!authRecord || !authRecord.status) {
+        throw new Error(
+          "Open Finance authorization not active for this account",
+        );
+      }
+
+      const newBalance = parseFloat(acc.balance) - parseFloat(amount);
+      if (newBalance < 0) throw new Error("Insufficient funds");
+
+      await this.accountService.update(acc.id, { balance: newBalance });
+
+      await this.transactionService.create({
+        amount,
+        account_id: acc.id,
       });
 
-      res.status(201).json({
+      res.json({
         success: true,
         message: "Transação feita com sucesso",
         data: {
-          balance: updatedAccount.balance,
+          balance: newBalance.toFixed(2),
         },
       });
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(400).json({
+        success: false,
+        error: error.message,
+      });
     }
   };
 }
