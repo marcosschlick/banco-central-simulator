@@ -52,6 +52,24 @@ export default class OpenFinance extends Model {
             },
           },
         },
+        expiration: {
+          type: Sequelize.BOOLEAN,
+          allowNull: false,
+          validate: {
+            isValidExpiration(value) {
+              if (this.expiration_date && value === false) {
+                throw new Error(
+                  "Expiration must be true if expiration_date is set",
+                );
+              }
+              if (!this.expiration_date && value === true) {
+                throw new Error(
+                  "Expiration cannot be true if expiration_date is not set",
+                );
+              }
+            },
+          },
+        },
       },
       {
         sequelize,
@@ -59,6 +77,13 @@ export default class OpenFinance extends Model {
         tableName: "open_finance",
         timestamps: true,
         hooks: {
+          beforeValidate: async (authorization) => {
+            if (authorization.expiration_date) {
+              authorization.expiration = true;
+            } else {
+              authorization.expiration = false;
+            }
+          },
           beforeSave: async (authorization) => {
             const now = new Date();
 

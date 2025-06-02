@@ -1,9 +1,9 @@
-import OpenFinanceService from "../services/OpenFinanceService.js";
+import OpenfinanceService from "../services/OpenfinanceService.js";
 import AccountService from "../services/AccountService.js";
 
 export default class OpenFinanceController {
   constructor() {
-    this.openFinanceService = new OpenFinanceService();
+    this.openfinanceService = new OpenfinanceService();
     this.accountService = new AccountService();
   }
 

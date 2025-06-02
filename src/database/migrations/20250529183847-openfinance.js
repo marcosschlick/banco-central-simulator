@@ -112,6 +112,10 @@ export default {
         type: DataTypes.DATE,
         allowNull: true,
       },
+      expiration: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
       account_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
