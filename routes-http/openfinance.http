@@ -5,6 +5,7 @@ Content-Type: application/json
 {
   "cpf": "12345678901",
   "expirationDate": "2026-05-27",
+  "expiration": true,
   "authorization": true
 }
 
@@ -15,6 +16,7 @@ Content-Type: application/json
 {
   "cpf": "12345678901",
   "expirationDate": "2026-05-01",
+  "expiration": true,
   "authorization": true
 }
 
@@ -23,18 +25,19 @@ PATCH http://localhost:3333/openfinance/revoke
 Content-Type: application/json
 
 {
-  "cpf": "12345678901"
+  "cpf": "12345678901",
+  "authorization": false
 }
 
 ### 4. Consultar saldo
-GET http://localhost:3333/openfinance?account=12345-6&agency=0001
+GET http://localhost:3333/openfinance?account=00458231&agency=0001
 
 ### 5. Criar transação
 POST http://localhost:3333/openfinance/transaction
 Content-Type: application/json
 
 {
-  "account": "12345-6",
+  "account": "00458231",
   "agency": "0001",
   "amount": 343.46
 }
