@@ -4,9 +4,9 @@ export default {
       "banks",
       [
         {
-          agency_code: "0001",
+          agency_code: "0001", // Mantido conforme original
           name: "Banco Inter",
-          logo_url: "https://www.bancointer.com.br/logo.png",
+          logo_url: "/logo_inter.png", // Caminho para a imagem pública
           created_at: new Date(),
           updated_at: new Date(),
         },
