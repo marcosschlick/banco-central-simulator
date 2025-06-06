@@ -1,0 +1,40 @@
+### 1. Criar autorização Open Finance
+POST http://localhost:3333/openfinance
+Content-Type: application/json
+
+{
+  "cpf": "12345678901",
+  "expirationDate": "2026-05-27",
+  "authorization": true
+}
+
+### 2. Atualizar autorização (action=update)
+PATCH http://localhost:3333/openfinance/update
+Content-Type: application/json
+
+{
+  "cpf": "12345678901",
+  "expirationDate": "2026-05-01",
+  "authorization": true
+}
+
+### 3. Revogar autorização (action=revoke)
+PATCH http://localhost:3333/openfinance/revoke
+Content-Type: application/json
+
+{
+  "cpf": "12345678901"
+}
+
+### 4. Consultar saldo
+GET http://localhost:3333/openfinance?account=12345-6&agency=0001
+
+### 5. Criar transação
+POST http://localhost:3333/openfinance/transaction
+Content-Type: application/json
+
+{
+  "account": "12345-6",
+  "agency": "0001",
+  "amount": 343.46
+}
