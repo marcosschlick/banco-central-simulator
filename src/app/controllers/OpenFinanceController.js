@@ -1,4 +1,3 @@
-// controllers/OpenFinanceController.js
 import UserService from "../services/UserService.js";
 import AccountService from "../services/AccountService.js";
 import OpenFinanceService from "../services/OpenfinanceService.js";
@@ -19,7 +18,6 @@ export default class OpenFinanceController {
       const { cpf, expirationDate, authorization } = req.body;
 
       const user = await this.userService.findByCpf(cpf);
-
       const accounts = await this.accountService.findByUser(user.id);
       if (!accounts.length) throw new Error("User has no accounts");
 
@@ -32,7 +30,7 @@ export default class OpenFinanceController {
         account_id: account.id,
       };
 
-      const authRecord = await this.openFinanceService.create(openFinanceData);
+      await this.openFinanceService.create(openFinanceData);
 
       res.status(201).json({
         success: true,
@@ -59,7 +57,6 @@ export default class OpenFinanceController {
       const { cpf, expirationDate, authorization } = req.body;
 
       const user = await this.userService.findByCpf(cpf);
-
       const accounts = await this.accountService.findByUser(user.id);
       if (!accounts.length) throw new Error("User has no accounts");
 
@@ -68,17 +65,16 @@ export default class OpenFinanceController {
 
       const authRecords = await this.openFinanceService.findAll();
       const authRecord = authRecords.find((a) => a.account_id === account.id);
-
       if (!authRecord) throw new Error("Authorization not found");
 
       const updateData = {
-        status: authorization,
+        status: action === "revoke" ? false : authorization,
         expiration_date: expirationDate || null,
       };
 
       await this.openFinanceService.update(authRecord.id, updateData);
 
-      if (authorization === false) {
+      if (action === "revoke") {
         return res.json({
           success: true,
           message: "Autorização Revogada com Sucesso",
@@ -153,17 +149,13 @@ export default class OpenFinanceController {
       if (newBalance < 0) throw new Error("Insufficient funds");
 
       await this.accountService.update(acc.id, { balance: newBalance });
-
-      await this.transactionService.create({
-        amount,
-        account_id: acc.id,
-      });
+      await this.transactionService.create({ amount, account_id: acc.id });
 
       res.json({
         success: true,
         message: "Transação feita com sucesso",
         data: {
-          balance: newBalance.toFixed(2),
+          balance: newBalance,
         },
       });
     } catch (error) {

@@ -98,7 +98,7 @@ export default class OpenFinance extends Model {
           beforeFind: async (options) => {
             const now = new Date();
 
-            await OpenFinanceAuthorization.update(
+            await OpenFinance.update(
               { status: false },
               {
                 where: {

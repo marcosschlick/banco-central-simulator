@@ -57,5 +57,9 @@ export default class Account extends Model {
       foreignKey: "account_id",
       as: "transactions",
     });
+    this.hasOne(models.OpenFinance, {
+      foreignKey: "account_id",
+      as: "open_finance",
+    });
   }
 }
