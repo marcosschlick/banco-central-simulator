@@ -5,25 +5,57 @@ export default {
       [
         {
           balance: 1500.0,
-          account_number: "12345-6",
-          user_id: 1, // João Silva
-          bank_id: 1, // Banco Inter
+          account_number: "00458231", // João Almeida
+          user_id: 1,
+          bank_id: 1,
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          balance: 2500.0,
-          account_number: "23456-7",
-          user_id: 2, // Maria Souza
-          bank_id: 1, // Banco Inter
+          balance: 1500.0,
+          account_number: "84736291", // Maria de Freitas
+          user_id: 2,
+          bank_id: 1,
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          balance: 3500.0,
-          account_number: "34567-8",
-          user_id: 3, // Carlos Oliveira
-          bank_id: 1, // Banco Inter
+          balance: 1500.0,
+          account_number: "52389364", // Gabriel Macedo
+          user_id: 3,
+          bank_id: 1,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          balance: 1500.0,
+          account_number: "66987415", // Fernanda da Silva
+          user_id: 4,
+          bank_id: 1,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          balance: 1500.0,
+          account_number: "98466513", // Rodrigo Caetano
+          user_id: 5,
+          bank_id: 1,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          balance: 1500.0,
+          account_number: "84956671", // Renato Gaúcho
+          user_id: 6,
+          bank_id: 1,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          balance: 1500.0,
+          account_number: "69442561", // Mazembe Mundial
+          user_id: 7,
+          bank_id: 1,
           created_at: new Date(),
           updated_at: new Date(),
         },
