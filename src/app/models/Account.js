@@ -25,17 +25,6 @@ export default class Account extends Model {
         modelName: "Account",
         tableName: "accounts",
         timestamps: true,
-        hooks: {
-          afterCreate: async (account, options) => {
-            const OpenFinanceAuthorization = sequelize.models.OpenFinance;
-
-            await OpenFinanceAuthorization.create({
-              status: false,
-              expiration_date: null,
-              account_id: account.id,
-            });
-          },
-        },
       },
     );
 
