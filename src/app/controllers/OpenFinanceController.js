@@ -24,13 +24,24 @@ export default class OpenFinanceController {
       const account = accounts[0];
       const bank = await this.bankService.findById(account.bank_id);
 
-      const openFinanceData = {
-        status: authorization,
-        expiration_date: expirationDate || null,
-        account_id: account.id,
-      };
+      const existingAuths = await this.openFinanceService.findAll();
+      const existingAuth = existingAuths.find(
+        (auth) => auth.account_id === account.id,
+      );
 
-      await this.openFinanceService.create(openFinanceData);
+      if (existingAuth) {
+        await this.openFinanceService.update(existingAuth.id, {
+          status: authorization,
+          expiration_date: expirationDate || null,
+        });
+      } else {
+        const openFinanceData = {
+          status: authorization,
+          expiration_date: expirationDate || null,
+          account_id: account.id,
+        };
+        await this.openFinanceService.create(openFinanceData);
+      }
 
       res.status(201).json({
         success: true,
