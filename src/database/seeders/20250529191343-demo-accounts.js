@@ -59,6 +59,46 @@ export default {
           created_at: new Date(),
           updated_at: new Date(),
         },
+        {
+          balance: 50000.0,
+          account_number: "58763214", // Andrei Albrecht
+          user_id: 8,
+          bank_id: 1,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          balance: 50000.0,
+          account_number: "92481736", // Alexandre Tonin
+          user_id: 9,
+          bank_id: 1,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          balance: 50000.0,
+          account_number: "35628491", // Ruan Oliveira
+          user_id: 10,
+          bank_id: 1,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          balance: 50000.0,
+          account_number: "71946325", // Marcos Schlick
+          user_id: 11,
+          bank_id: 1,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          balance: 50000.0,
+          account_number: "48295673", // Matheus Aguiar
+          user_id: 12,
+          bank_id: 1,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ],
       {},
     );
