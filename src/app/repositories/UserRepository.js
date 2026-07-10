@@ -1,20 +1,44 @@
 import User from "../models/User.js";
+import { Op } from "sequelize";
 
 export default class UserRepository {
   async create(userData) {
-    return await User.create(userData);
+    try {
+      return await User.create(userData);
+    } catch (error) {
+      throw new Error(`Failed to create user: ${error.message}`);
+    }
   }
 
   async findById(id) {
     return await User.findByPk(id);
   }
 
+  async findAll() {
+    return await User.findAll();
+  }
+
   async findByCpf(cpf) {
     return await User.findOne({ where: { cpf } });
   }
 
-  async findAll() {
-    return await User.findAll();
+  async findByEmail(email) {
+    return await User.findOne({ where: { email } });
+  }
+
+  async findByName(searchName) {
+    const normalizedName = searchName
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+
+    return await User.findAll({
+      where: {
+        name: {
+          [Op.iLike]: `%${normalizedName}%`,
+        },
+      },
+    });
   }
 
   async update(id, updateData) {

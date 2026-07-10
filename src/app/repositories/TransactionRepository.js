@@ -1,23 +1,26 @@
 import Transaction from "../models/Transaction.js";
-import { Op } from "sequelize";
 
 export default class TransactionRepository {
   async create(transactionData) {
-    return await Transaction.create(transactionData);
+    try {
+      return await Transaction.create(transactionData);
+    } catch (error) {
+      throw new Error(`Failed to create transaction: ${error.message}`);
+    }
   }
 
   async findById(id) {
     return await Transaction.findByPk(id);
   }
 
-  async findByOriginAccountIds(accountIds) {
-    return await Transaction.findAll({
-      where: { origin_account_id: { [Op.in]: accountIds } },
-    });
-  }
-
   async findAll() {
     return await Transaction.findAll();
+  }
+
+  async findByAccount(accountId) {
+    return await Transaction.findAll({
+      where: { account_id: accountId },
+    });
   }
 
   async update(id, updateData) {

@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes } from "sequelize";
+import { DataTypes } from "sequelize";
 
 const commonFields = {
   id: {
@@ -7,17 +7,15 @@ const commonFields = {
     primaryKey: true,
     autoIncrement: true,
   },
-  createdAt: {
+  created_at: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: Sequelize.NOW,
-    field: "created_at",
+    defaultValue: DataTypes.NOW,
   },
-  updatedAt: {
+  updated_at: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: Sequelize.NOW,
-    field: "updated_at",
+    defaultValue: DataTypes.NOW,
   },
 };
 
@@ -29,18 +27,26 @@ export default {
         type: DataTypes.STRING(11),
         allowNull: false,
         unique: true,
-        validate: { len: [11, 11] },
       },
       name: {
         type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        unique: true,
+      },
+      birth_date: {
+        type: DataTypes.DATE,
         allowNull: false,
       },
     });
 
-    await queryInterface.createTable("institutions", {
+    await queryInterface.createTable("banks", {
       ...commonFields,
-      code: {
-        type: DataTypes.STRING(3),
+      agency_code: {
+        type: DataTypes.STRING(20),
         allowNull: false,
         unique: true,
       },
@@ -48,6 +54,10 @@ export default {
         type: DataTypes.STRING(100),
         allowNull: false,
         unique: true,
+      },
+      logo_url: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
       },
     });
 
@@ -55,21 +65,13 @@ export default {
       ...commonFields,
       balance: {
         type: DataTypes.DECIMAL(15, 2),
-        defaultValue: 0,
         allowNull: false,
-        validate: { min: 0 },
+        defaultValue: 0,
       },
-      credit_limit: {
-        type: DataTypes.DECIMAL(15, 2),
-        defaultValue: 0,
+      account_number: {
+        type: DataTypes.STRING(20),
         allowNull: false,
-        validate: { min: 0 },
-      },
-      credit_available: {
-        type: DataTypes.DECIMAL(15, 2),
-        defaultValue: 0,
-        allowNull: false,
-        validate: { min: 0 },
+        unique: true,
       },
       user_id: {
         type: DataTypes.INTEGER,
@@ -77,71 +79,80 @@ export default {
         references: {
           model: "users",
           key: "id",
-          onDelete: "CASCADE",
-          onUpdate: "CASCADE",
         },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
-      institution_id: {
+      bank_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "institutions",
+          model: "banks",
           key: "id",
-          onDelete: "CASCADE",
-          onUpdate: "CASCADE",
         },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
     });
 
     await queryInterface.addConstraint("accounts", {
-      fields: ["user_id", "institution_id"],
+      fields: ["user_id", "bank_id"],
       type: "unique",
-      name: "unique_account_user_institution",
+      name: "unique_user_bank_account",
+    });
+
+    await queryInterface.createTable("open_finance", {
+      ...commonFields,
+      status: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      expiration_date: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      expiration: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      account_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        unique: true,
+        references: {
+          model: "accounts",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      },
     });
 
     await queryInterface.createTable("transactions", {
       ...commonFields,
-      type: {
-        type: DataTypes.ENUM("debit", "credit"),
-        allowNull: false,
-      },
       amount: {
         type: DataTypes.DECIMAL(15, 2),
         allowNull: false,
-        validate: { min: 0.01 },
       },
-      date: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW,
-      },
-      origin_account_id: {
+      account_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: "accounts",
           key: "id",
-          onDelete: "CASCADE",
-          onUpdate: "CASCADE",
         },
-      },
-      destination_account_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "accounts",
-          key: "id",
-          onDelete: "CASCADE",
-          onUpdate: "CASCADE",
-        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
     });
   },
 
   async down(queryInterface) {
     await queryInterface.dropTable("transactions");
+    await queryInterface.dropTable("open_finance");
     await queryInterface.dropTable("accounts");
-    await queryInterface.dropTable("institutions");
+    await queryInterface.dropTable("banks");
     await queryInterface.dropTable("users");
   },
 };

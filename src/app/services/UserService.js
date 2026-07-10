@@ -6,28 +6,56 @@ export default class UserService {
   }
 
   async create(userData) {
-    const existingUser = await this.userRepository.findByCpf(userData.cpf);
-    if (existingUser) throw new Error("CPF already registered");
+    const existingUserCpf = await this.userRepository.findByCpf(userData.cpf);
+    if (existingUserCpf) throw new Error("CPF already registered");
+    const existingUserEmail = await this.userRepository.findByEmail(
+      userData.email,
+    );
+    if (existingUserEmail) throw new Error("Email already registered");
     return this.userRepository.create(userData);
   }
 
   async findById(id) {
-    return await this.userRepository.findById(id);
-  }
-
-  async findByCpf(cpf) {
-    return await this.userRepository.findByCpf(cpf);
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new Error("User not found");
+    return user;
   }
 
   async findAll() {
     return await this.userRepository.findAll();
   }
 
+  async findByCpf(cpf) {
+    const user = await this.userRepository.findByCpf(cpf);
+    if (!user) throw new Error("User not found");
+    return user;
+  }
+
+  async findByEmail(email) {
+    const user = await this.userRepository.findByEmail(email);
+    if (!user) throw new Error("User not found");
+    return user;
+  }
+
+  async findByName(name) {
+    return await this.userRepository.findByName(name);
+  }
+
   async update(id, updateData) {
     if (updateData.cpf) {
-      const existingUser = await this.userRepository.findByCpf(updateData.cpf);
-      if (existingUser && existingUser.id !== id) {
+      const existingUserCpf = await this.userRepository.findByCpf(
+        updateData.cpf,
+      );
+      if (existingUserCpf && existingUserCpf.id !== id) {
         throw new Error("CPF already registered");
+      }
+    }
+    if (updateData.email) {
+      const existingUserEmail = await this.userRepository.findByEmail(
+        updateData.email,
+      );
+      if (existingUserEmail && existingUserEmail.id !== id) {
+        throw new Error("Email already registered");
       }
     }
     const updatedUser = await this.userRepository.update(id, updateData);

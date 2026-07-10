@@ -1,6 +1,6 @@
 import { Sequelize, Model } from "sequelize";
 
-class Transaction extends Model {
+export default class Transaction extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -9,19 +9,10 @@ class Transaction extends Model {
           primaryKey: true,
           autoIncrement: true,
         },
-        type: {
-          type: Sequelize.ENUM("debit", "credit"),
-          allowNull: false,
-        },
         amount: {
-          type: Sequelize.DECIMAL(15, 2),
+          type: Sequelize.DECIMAL,
           allowNull: false,
           validate: { min: 0.01 },
-        },
-        date: {
-          type: Sequelize.DATE,
-          allowNull: false,
-          defaultValue: Sequelize.NOW,
         },
       },
       {
@@ -37,15 +28,8 @@ class Transaction extends Model {
 
   static associate(models) {
     this.belongsTo(models.Account, {
-      foreignKey: "origin_account_id",
-      as: "origin",
-    });
-
-    this.belongsTo(models.Account, {
-      foreignKey: "destination_account_id",
-      as: "destination",
+      foreignKey: "account_id",
+      as: "account",
     });
   }
 }
-
-export default Transaction;

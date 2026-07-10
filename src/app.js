@@ -1,15 +1,15 @@
 import express from "express";
-import { accountRoutes } from "./routes/AccountRoutes.js";
-import { institutionRoutes } from "./routes/InstitutionRoutes.js";
-import { transactionRoutes } from "./routes/TransactionRoutes.js";
-import { userRoutes } from "./routes/UserRoutes.js";
+import { openFinanceRoutes } from "./routes/OpenFinanceRoutes.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "../public")));
 
-app.use("/accounts", accountRoutes);
-app.use("/institutions", institutionRoutes);
-app.use("/transactions", transactionRoutes);
-app.use("/users", userRoutes);
+app.use("/openfinance", openFinanceRoutes);
 
 export default app;

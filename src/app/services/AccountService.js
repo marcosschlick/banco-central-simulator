@@ -1,16 +1,24 @@
 import AccountRepository from "../repositories/AccountRepository.js";
-import UserRepository from "../repositories/UserRepository.js";
-import InstitutionRepository from "../repositories/InstitutionRepository.js";
 
 export default class AccountService {
   constructor() {
     this.accountRepository = new AccountRepository();
-    this.userRepository = new UserRepository();
-    this.institutionRepository = new InstitutionRepository();
   }
 
   async create(accountData) {
-    return await this.accountRepository.create(accountData);
+    const existingAccount = await this.accountRepository.findByUserAndBank(
+      accountData.userId,
+      accountData.bankId,
+    );
+    if (existingAccount)
+      throw new Error("User already registered with this bank");
+    const existingNumberAccount =
+      await this.accountRepository.findByAccountNumber(
+        accountData.accountNumber,
+      );
+    if (existingNumberAccount)
+      throw new Error("Number account already registered");
+    return this.accountRepository.create(accountData);
   }
 
   async findById(id) {
@@ -19,15 +27,41 @@ export default class AccountService {
     return account;
   }
 
-  async findByUserId(userId) {
-    return await this.accountRepository.findByUserId(userId);
-  }
-
   async findAll() {
     return await this.accountRepository.findAll();
   }
 
+  async findByUser(userId) {
+    return await this.accountRepository.findByUser(userId);
+  }
+
+  async findByAccountNumber(accountNumber) {
+    return await this.accountRepository.findByAccountNumber(accountNumber);
+  }
+
   async update(id, updateData) {
+    if (updateData.userId || updateData.bankId) {
+      const account = await this.accountRepository.findById(id);
+      if (!account) throw new Error("Account not found");
+      const userId = updateData.userId || account.userId;
+      const bankId = updateData.bankId || account.bankId;
+      const existingAccount = await this.accountRepository.findByUserAndBank(
+        userId,
+        bankId,
+      );
+      if (existingAccount && existingAccount.id !== id) {
+        throw new Error("User already registered with this bank");
+      }
+    }
+    if (updateData.accountNumber) {
+      const existingNumberAccount =
+        await this.accountRepository.findByAccountNumber(
+          updateData.accountNumber,
+        );
+      if (existingNumberAccount && existingNumberAccount.id !== id) {
+        throw new Error("Number account already registered");
+      }
+    }
     const updatedAccount = await this.accountRepository.update(id, updateData);
     if (!updatedAccount) throw new Error("Account not found");
     return updatedAccount;
@@ -37,77 +71,5 @@ export default class AccountService {
     const isDeleted = await this.accountRepository.delete(id);
     if (!isDeleted) throw new Error("Account not found");
     return true;
-  }
-
-  async findBalances(userId) {
-    const user = await this.userRepository.findById(userId);
-    const balances = await this.accountRepository.findBalanceByUserId(userId);
-
-    return Promise.all(
-      balances.map(async (item) => {
-        const institution = await this.institutionRepository.findById(
-          item.institution_id,
-        );
-        return {
-          user: user.name,
-          institution: institution.name,
-          balance: item.balance,
-          creditLimit: item.credit_limit,
-          creditAvailable: item.credit_available,
-        };
-      }),
-    );
-  }
-
-  async findTotalBalanceByUserId(userId) {
-    const user = await this.userRepository.findById(userId);
-    const accounts = await this.accountRepository.findBalanceByUserId(userId);
-
-    const totals = accounts.reduce(
-      (acc, account) => ({
-        balance: acc.balance + Number(account.balance),
-        creditLimit: acc.creditLimit + Number(account.credit_limit),
-        creditAvailable: acc.creditAvailable + Number(account.credit_available),
-      }),
-      { balance: 0, creditLimit: 0, creditAvailable: 0 },
-    );
-
-    return {
-      user: user.name,
-      totalBalance: totals.balance,
-      totalCreditLimit: totals.creditLimit,
-      totalCreditAvailable: totals.creditAvailable,
-    };
-  }
-
-  async findBalanceByInstitution(userId, institutionName) {
-    const user = await this.userRepository.findById(userId);
-    const { id: institutionId, name } =
-      await this.institutionRepository.findByName(institutionName);
-
-    const balance = await this.accountRepository.findBalanceByInstitutionId(
-      userId,
-      institutionId,
-    );
-
-    return {
-      user: user.name,
-      institution: name,
-      balance: balance.balance,
-      creditLimit: balance.credit_limit,
-      creditAvailable: balance.credit_available,
-    };
-  }
-
-  async findUserTransactions(userId) {
-    const user = await this.userRepository.findById(userId);
-    const accounts = await this.accountRepository.findByUser(userId);
-
-    return {
-      user: user.name,
-      transactions: await this.transactionRepository.findByUser(
-        accounts.map((a) => a.id),
-      ),
-    };
   }
 }
